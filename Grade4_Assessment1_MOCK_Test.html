@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 4 · Mock Assessment 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2744; --blue:#1a4a8a; --teal:#0e7c6e; --gold:#e8a020;
+  --cream:#f7f4ef; --white:#ffffff; --green:#1e8a4a; --red:#c93535;
+  --mid:#546e8a; --light:#edf2f8; --border:#d4dce8;
+  --shadow-sm:0 2px 8px rgba(15,39,68,.08);
+  --shadow-md:0 6px 24px rgba(15,39,68,.13);
+  --shadow-lg:0 16px 48px rgba(15,39,68,.18);
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);line-height:1.6}
+
+/* ══ SCREENS ══════════════════════════════════════════ */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ══ COVER SCREEN ═════════════════════════════════════ */
+#cover{
+  min-height:100vh;
+  background:linear-gradient(160deg,#0f2744 0%,#1a4a8a 50%,#0e7c6e 100%);
+  display:none;align-items:center;justify-content:center;padding:40px 20px;
+}
+#cover.active{display:flex}
+.cover-card{
+  background:var(--white);border-radius:24px;padding:52px 44px;
+  max-width:560px;width:100%;box-shadow:var(--shadow-lg);
+}
+.mock-ribbon{
+  background:var(--gold);color:var(--navy);font-weight:700;font-size:.75rem;
+  letter-spacing:1.5px;text-transform:uppercase;padding:5px 16px;
+  border-radius:20px;display:inline-block;margin-bottom:20px;
+}
+.cover-card h1{
+  font-family:'Playfair Display',serif;font-size:2.2rem;
+  line-height:1.2;color:var(--navy);margin-bottom:6px;
+}
+.cover-card .subtitle{color:var(--mid);font-size:.95rem;margin-bottom:32px}
+.info-strip{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:32px;
+}
+.info-item{
+  background:var(--light);border-radius:12px;padding:14px 10px;text-align:center;
+}
+.info-item .i-label{font-size:.7rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px}
+.info-item .i-val{font-weight:700;color:var(--navy);font-size:1.05rem;margin-top:4px}
+.field-group{margin-bottom:20px}
+.field-group label{display:block;font-weight:600;font-size:.88rem;margin-bottom:8px;color:var(--navy)}
+.field-group input, .field-group select{
+  width:100%;border:2px solid var(--border);border-radius:10px;
+  padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:1rem;
+  color:var(--navy);outline:none;transition:border .2s;background:var(--white);
+}
+.field-group input:focus, .field-group select:focus{border-color:var(--teal)}
+.cover-notice{
+  background:#fff8ec;border:2px solid #f5d78e;border-radius:10px;
+  padding:14px 16px;font-size:.85rem;color:#7a5500;margin-bottom:28px;line-height:1.5;
+}
+.cover-notice strong{display:block;margin-bottom:4px}
+.btn-primary{
+  width:100%;background:var(--navy);color:white;border:none;border-radius:12px;
+  padding:16px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.05rem;
+  cursor:pointer;transition:background .2s,transform .15s;letter-spacing:.3px;
+}
+.btn-primary:hover{background:var(--blue);transform:translateY(-1px)}
+.btn-primary:active{transform:translateY(0)}
+
+/* ══ TEST SHELL ═══════════════════════════════════════ */
+#test{min-height:100vh;display:none;flex-direction:column}
+#test.active{display:flex}
+
+/* header */
+.t-header{
+  background:var(--navy);color:white;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;height:60px;position:sticky;top:0;z-index:200;
+  box-shadow:0 2px 16px rgba(0,0,0,.25);
+}
+.t-header-left h2{font-family:'Playfair Display',serif;font-size:1rem;line-height:1}
+.t-header-left .sub{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:2px}
+.t-timer{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.1);border-radius:8px;padding:7px 16px;
+}
+.t-timer .icon{font-size:1rem}
+.t-timer #timer-display{
+  font-family:'Playfair Display',serif;font-size:1.4rem;
+  letter-spacing:2px;color:white;min-width:62px;text-align:center;
+}
+.t-timer.warn{background:var(--red);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.7}}
+.t-right{display:flex;align-items:center;gap:16px}
+.q-counter{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600}
+
+/* progress */
+.prog-bar{height:4px;background:rgba(255,255,255,.15)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s}
+
+/* body */
+.t-body{flex:1;max-width:860px;width:100%;margin:0 auto;padding:32px 20px 120px}
+
+/* section header */
+.sec-hd{
+  display:flex;align-items:flex-start;gap:16px;
+  background:var(--white);border-radius:var(--r);padding:22px 24px;
+  margin-bottom:20px;box-shadow:var(--shadow-sm);border-left:5px solid var(--teal);
+}
+.sec-hd .sec-icon{font-size:2rem;flex-shrink:0;margin-top:2px}
+.sec-hd h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy)}
+.sec-hd .sec-ccss{
+  font-size:.72rem;font-weight:700;color:var(--teal);text-transform:uppercase;
+  letter-spacing:.5px;margin-top:4px;
+}
+.sec-hd .sec-desc{font-size:.85rem;color:var(--mid);margin-top:4px}
+
+/* passage */
+.passage{
+  background:var(--white);border-radius:var(--r);padding:28px;
+  margin-bottom:20px;box-shadow:var(--shadow-sm);
+  border:1px solid var(--border);
+}
+.passage-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.passage-title{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--navy)}
+.tts-btn{
+  display:flex;align-items:center;gap:6px;background:var(--light);border:2px solid var(--teal);
+  color:var(--teal);border-radius:8px;padding:7px 14px;font-size:.8rem;font-weight:700;
+  cursor:pointer;transition:all .2s;white-space:nowrap;
+}
+.tts-btn:hover{background:var(--teal);color:white}
+.tts-btn.speaking{background:var(--red);border-color:var(--red);color:white}
+.passage-text{font-size:.97rem;line-height:1.9;color:#2a3a50}
+.passage-text p{margin-bottom:12px}
+.passage-text .para-num{
+  font-weight:700;color:var(--teal);font-size:.8rem;
+  display:inline-block;width:24px;flex-shrink:0;
+}
+
+/* question card */
+.q-card{
+  background:var(--white);border-radius:var(--r);padding:24px;
+  margin-bottom:14px;box-shadow:var(--shadow-sm);border:1px solid var(--border);
+  transition:box-shadow .2s;
+}
+.q-card:hover{box-shadow:var(--shadow-md)}
+.q-meta{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.q-badge{
+  font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+  padding:3px 10px;border-radius:20px;
+}
+.q-badge.num{background:var(--navy);color:white}
+.q-badge.ccss{background:var(--light);color:var(--teal)}
+.q-badge.domain{background:#fef3e2;color:#a06000}
+.q-text{font-size:.98rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:18px}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:580px){.options{grid-template-columns:1fr}}
+.opt{
+  display:flex;align-items:center;gap:12px;
+  background:var(--light);border:2px solid transparent;border-radius:10px;
+  padding:12px 16px;cursor:pointer;transition:all .15s;font-size:.92rem;font-weight:500;
+}
+.opt:hover:not(.locked){border-color:var(--teal);background:#e6f4f2}
+.opt.selected{border-color:var(--teal);background:#d4ece9}
+.opt.correct{border-color:var(--green);background:#e6f9ee;cursor:default}
+.opt.wrong{border-color:var(--red);background:#fdeaea;cursor:default}
+.opt-letter{
+  width:28px;height:28px;border-radius:50%;background:var(--mid);color:white;
+  font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .15s;
+}
+.opt.selected .opt-letter{background:var(--teal)}
+.opt.correct .opt-letter{background:var(--green)}
+.opt.wrong .opt-letter{background:var(--red)}
+.q-feedback{
+  margin-top:12px;padding:10px 14px;border-radius:8px;
+  font-size:.85rem;font-weight:600;display:none;line-height:1.5;
+}
+.q-feedback.show{display:block}
+.q-feedback.ok{background:#e6f9ee;color:#1a5c35;border-left:4px solid var(--green)}
+.q-feedback.no{background:#fdeaea;color:#8c1c1c;border-left:4px solid var(--red)}
+
+/* check btn */
+.check-btn{
+  margin-top:16px;background:var(--teal);color:white;border:none;
+  border-radius:8px;padding:9px 22px;font-size:.88rem;font-weight:700;
+  cursor:pointer;transition:background .2s;display:none;
+}
+.check-btn.show{display:inline-flex;align-items:center;gap:6px}
+.check-btn:hover{background:var(--blue)}
+
+/* oral section */
+.oral-section{
+  background:var(--white);border-radius:var(--r);padding:32px;
+  box-shadow:var(--shadow-sm);border:1px solid var(--border);
+}
+.oral-section h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:6px}
+.oral-section .sub{font-size:.85rem;color:var(--mid);margin-bottom:24px}
+.story-card{
+  background:var(--light);border-radius:12px;padding:24px;
+  border-left:4px solid var(--teal);margin-bottom:28px;
+}
+.story-card h4{font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--teal);margin-bottom:12px}
+.story-card p{font-size:.93rem;line-height:1.8;color:#2a3a50}
+.story-card p+p{margin-top:10px}
+.speak-prompts{margin-bottom:24px}
+.speak-prompts h4{font-weight:700;font-size:.9rem;color:var(--navy);margin-bottom:12px}
+.prompt-item{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:12px 14px;background:var(--light);border-radius:10px;margin-bottom:8px;
+}
+.prompt-item .pn{
+  width:26px;height:26px;border-radius:50%;background:var(--teal);color:white;
+  font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:1px;
+}
+.prompt-item span{font-size:.93rem;font-weight:500;line-height:1.5}
+.rec-area{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:28px;background:var(--light);border-radius:14px;margin-bottom:24px;
+}
+.rec-btn{
+  width:76px;height:76px;border-radius:50%;border:none;cursor:pointer;
+  font-size:1.8rem;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;box-shadow:var(--shadow-md);
+}
+.rec-btn.idle{background:var(--teal);color:white}
+.rec-btn.idle:hover{background:var(--blue);transform:scale(1.05)}
+.rec-btn.recording{background:var(--red);color:white;animation:blink 1.2s infinite}
+.rec-btn.done{background:var(--green);color:white}
+.rec-status{font-weight:700;font-size:.9rem;color:var(--navy)}
+#rec-timer{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--mid)}
+.rubric-table{width:100%;border-collapse:collapse;font-size:.87rem}
+.rubric-table th{
+  background:var(--navy);color:white;padding:10px 14px;text-align:left;
+  font-weight:700;font-size:.78rem;letter-spacing:.3px;
+}
+.rubric-table th:first-child{border-radius:8px 0 0 0}
+.rubric-table th:last-child{border-radius:0 8px 0 0}
+.rubric-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.rubric-table tr:last-child td{border-bottom:none}
+.rubric-table tr:nth-child(even) td{background:var(--light)}
+.pts-badge{
+  display:inline-block;background:var(--teal);color:white;
+  border-radius:6px;padding:2px 8px;font-weight:700;font-size:.8rem;
+}
+
+/* nav bar */
+.t-nav{
+  position:fixed;bottom:0;left:0;right:0;background:var(--white);
+  border-top:2px solid var(--border);padding:14px 28px;
+  display:flex;justify-content:space-between;align-items:center;z-index:190;
+  box-shadow:0 -4px 20px rgba(15,39,68,.1);
+}
+.nav-info{font-size:.82rem;color:var(--mid);font-weight:600}
+.btn-nav{
+  border:none;border-radius:10px;padding:11px 26px;
+  font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;
+  cursor:pointer;transition:all .15s;
+}
+.btn-prev{background:var(--light);color:var(--navy)}
+.btn-prev:hover{background:var(--border)}
+.btn-next{background:var(--navy);color:white}
+.btn-next:hover{background:var(--blue)}
+.btn-submit{background:var(--teal);color:white}
+.btn-submit:hover{background:var(--green)}
+.btn-nav:disabled{opacity:.4;cursor:not-allowed}
+.sec-dots{display:flex;gap:6px}
+.sec-dot{
+  width:10px;height:10px;border-radius:50%;background:var(--border);
+  cursor:pointer;transition:background .2s;
+}
+.sec-dot.done{background:var(--teal)}
+.sec-dot.active{background:var(--navy);transform:scale(1.3)}
+
+/* ══ RESULTS SCREEN ═══════════════════════════════════ */
+#results{
+  min-height:100vh;background:var(--cream);
+  display:none;flex-direction:column;
+}
+#results.active{display:flex}
+.results-header{
+  background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);
+  padding:40px 24px;text-align:center;color:white;
+}
+.results-header .mock-tag{
+  background:var(--gold);color:var(--navy);font-weight:700;font-size:.72rem;
+  letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;
+  border-radius:20px;display:inline-block;margin-bottom:16px;
+}
+.results-header h1{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:8px}
+.score-circle-wrap{margin:28px auto 0;width:160px;height:160px;position:relative}
+.score-circle-wrap svg{transform:rotate(-90deg)}
+.score-circle-wrap .score-text{
+  position:absolute;inset:0;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+}
+.score-text .big{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:white}
+.score-text .small{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600}
+.results-body{max-width:700px;margin:0 auto;padding:32px 20px 60px;width:100%}
+.results-section{background:var(--white);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.results-section h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.domain-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.domain-row:last-child{margin-bottom:0}
+.domain-label{font-size:.85rem;font-weight:600;color:var(--navy);flex:0 0 180px}
+.domain-bar-wrap{flex:1;height:8px;background:var(--light);border-radius:4px;overflow:hidden}
+.domain-bar{height:100%;border-radius:4px;background:var(--teal);transition:width 1s ease}
+.domain-score{font-size:.85rem;font-weight:700;color:var(--navy);flex:0 0 50px;text-align:right}
+.answer-review{margin-top:6px}
+.rev-item{
+  display:flex;gap:12px;align-items:flex-start;padding:10px 14px;
+  border-radius:8px;margin-bottom:6px;font-size:.85rem;
+}
+.rev-item.ok{background:#e6f9ee}
+.rev-item.no{background:#fdeaea}
+.rev-icon{font-size:1rem;flex-shrink:0;margin-top:1px}
+.rev-q{font-weight:600;color:var(--navy)}
+.rev-ans{color:var(--mid);font-size:.8rem;margin-top:2px}
+.btn-print{
+  width:100%;margin-top:8px;background:var(--navy);color:white;border:none;
+  border-radius:10px;padding:14px;font-family:'DM Sans',sans-serif;font-weight:700;
+  font-size:1rem;cursor:pointer;
+}
+.btn-print:hover{background:var(--blue)}
+/* Print */
+@media print{
+  .t-nav,.t-header,.prog-bar,.btn-print{display:none!important}
+  body{background:white}
+  .q-card,.passage,.sec-hd{box-shadow:none;border:1px solid #ccc}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════
+     COVER
+══════════════════════════════════════════════════════ -->
+<div id="cover" class="screen active">
+  <div class="cover-card">
+    <div class="mock-ribbon">📋 Mock Test – Practice Run</div>
+    <h1>Assessment 1<br>Grade 4 Language Arts</h1>
+    <p class="subtitle">Weeks 1–11 · Reading, Phonics &amp; Speaking</p>
+    <div class="info-strip">
+      <div class="info-item"><div class="i-label">Duration</div><div class="i-val">60 min</div></div>
+      <div class="info-item"><div class="i-label">Questions</div><div class="i-val">28 + Oral</div></div>
+      <div class="info-item"><div class="i-label">Total Points</div><div class="i-val">38 pts</div></div>
+    </div>
+    <div class="field-group">
+      <label>Student Full Name</label>
+      <input type="text" id="student-name" placeholder="Type your full name…">
+    </div>
+    <div class="field-group">
+      <label>Teacher</label>
+      <input type="text" id="teacher-name" placeholder="Teacher's name…">
+    </div>
+    <div class="cover-notice">
+      <strong>📌 Before you begin:</strong>
+      This is a <em>mock</em> (practice) test. You will see your score and feedback after each answer.
+      Read every question carefully. Use the passage to help answer reading questions.
+      The final section is a <strong>spoken response</strong> — make sure your microphone is ready.
+    </div>
+    <button class="btn-primary" onclick="startTest()">Begin Mock Test →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TEST
+══════════════════════════════════════════════════════ -->
+<div id="test" class="screen">
+  <header class="t-header">
+    <div class="t-header-left">
+      <h2>Grade 4 · Mock Assessment 1</h2>
+      <div class="sub" id="hdr-student"></div>
+    </div>
+    <div class="t-right">
+      <span class="q-counter" id="q-counter">Section 1 of 6</span>
+      <div class="t-timer" id="timer-box">
+        <span class="icon">⏱</span>
+        <span id="timer-display">60:00</span>
+      </div>
+    </div>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+
+  <div class="t-body" id="t-body"><!-- sections injected here --></div>
+
+  <nav class="t-nav">
+    <button class="btn-nav btn-prev" id="btn-prev" onclick="prevSec()">← Previous</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div class="sec-dots" id="sec-dots"></div>
+      <span class="nav-info" id="nav-info">Section 1 of 6</span>
+    </div>
+    <button class="btn-nav btn-next" id="btn-next" onclick="nextSec()">Next →</button>
+  </nav>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     RESULTS
+══════════════════════════════════════════════════════ -->
+<div id="results" class="screen">
+  <div class="results-header">
+    <div class="mock-tag">📋 Mock Test Results</div>
+    <h1>Assessment 1 Complete!</h1>
+    <div id="student-display" style="font-size:.9rem;opacity:.8;margin-bottom:16px"></div>
+    <div class="score-circle-wrap">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="12"/>
+        <circle id="score-arc" cx="80" cy="80" r="68" fill="none" stroke="#e8a020" stroke-width="12"
+          stroke-dasharray="427" stroke-dashoffset="427" stroke-linecap="round"/>
+      </svg>
+      <div class="score-text">
+        <div class="big" id="score-pct">-</div>
+        <div class="small" id="score-raw">0 / 28</div>
+      </div>
+    </div>
+  </div>
+  <div class="results-body">
+    <div class="results-section">
+      <h3>📊 Score by Standard</h3>
+      <div id="domain-breakdown"></div>
+    </div>
+    <div class="results-section">
+      <h3>📝 Question Review</h3>
+      <div id="answer-review"></div>
+    </div>
+    <div class="results-section">
+      <h3>🎤 Speaking Task</h3>
+      <p style="font-size:.88rem;color:var(--mid);line-height:1.6">
+        Your spoken response was recorded. Your teacher will review it using the rubric below.<br><br>
+        <strong>Speaking Rubric (10 points):</strong>
+      </p>
+      <table class="rubric-table" style="margin-top:14px">
+        <thead><tr><th>Criterion</th><th>Points</th><th>What to Look For</th></tr></thead>
+        <tbody>
+          <tr><td>Character Description</td><td><span class="pts-badge">2</span></td><td>Names character and describes traits/actions with at least one text detail</td></tr>
+          <tr><td>Setting Description</td><td><span class="pts-badge">2</span></td><td>Identifies where and when the story takes place with text support</td></tr>
+          <tr><td>Plot Summary (B/M/E)</td><td><span class="pts-badge">3</span></td><td>Covers beginning, middle, and end; includes the main problem and solution</td></tr>
+          <tr><td>Text Evidence</td><td><span class="pts-badge">2</span></td><td>Refers to at least two specific details from the passage to support ideas</td></tr>
+          <tr><td>Clarity &amp; Fluency</td><td><span class="pts-badge">1</span></td><td>Speaks in complete sentences; easy to follow; stays on topic</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <button class="btn-print" onclick="window.print()">🖨️ Print / Save Results</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════════════════
+const SECTIONS = [
+  {
+    id:'s1', title:'Section 1: Reading Foundations',
+    icon:'🔤', ccss:'RF.4.3a · RF.4.4',
+    desc:'Multisyllabic words, affixes, and reading fluency strategies',
+    passage:null,
+    questions:[
+      {id:'q1',
+       text:'Which word has exactly THREE syllables?',
+       opts:['A. elephant','B. birthday','C. sunlight','D. run'],
+       ans:0,
+       ccss:'RF.4.3a',domain:'Reading Foundations',
+       feedback:'Correct! "El-e-phant" has three syllables. "Birthday" and "sunlight" have two, and "run" has one.'},
+      {id:'q2',
+       text:'How would you correctly break the word "uncomfortable" into syllables?',
+       opts:['A. un-com-fort-a-ble','B. uncom-fort-able','C. u-ncom-fort-able','D. uncomfortable'],
+       ans:0,
+       ccss:'RF.4.3a',domain:'Reading Foundations',
+       feedback:'Correct! "Un-com-fort-a-ble" = 5 syllables. Breaking words into syllables helps you decode long, unfamiliar words.'},
+      {id:'q3',
+       text:'What does the prefix "un-" mean in the word "unhappy"?',
+       opts:['A. very','B. not','C. again','D. before'],
+       ans:1,
+       ccss:'RF.4.3a',domain:'Reading Foundations',
+       feedback:'Correct! The prefix "un-" means "not." So "unhappy" means "not happy."'},
+      {id:'q4',
+       text:'What does the suffix "-ful" mean in the word "careful"?',
+       opts:['A. without','B. again','C. full of / having','D. before'],
+       ans:2,
+       ccss:'RF.4.3a',domain:'Reading Foundations',
+       feedback:'Correct! "-ful" means "full of" or "having." "Careful" means "full of care."'},
+      {id:'q5',
+       text:'Which word contains a prefix that means "before"?',
+       opts:['A. replay','B. unhappy','C. preheat','D. misplace'],
+       ans:2,
+       ccss:'RF.4.3a',domain:'Reading Foundations',
+       feedback:'Correct! "Pre-" means before. "Preheat" means to heat before using.'},
+      {id:'q6',
+       text:'A student is reading and encounters an unfamiliar word. Which is the BEST strategy to figure out its meaning?',
+       opts:['A. Skip the word and keep reading','B. Re-read the surrounding sentences for context clues','C. Stop reading immediately','D. Replace it with any familiar word'],
+       ans:1,
+       ccss:'RF.4.4',domain:'Reading Foundations',
+       feedback:'Correct! Using context clues — the words and sentences around an unknown word — is the best strategy for figuring out meaning while reading.'},
+    ]
+  },
+  {
+    id:'s2', title:'Section 2: Speaking & Listening',
+    icon:'🎙️', ccss:'SL.4.1 · SL.4.2',
+    desc:'Collaborative discussions and paraphrasing information',
+    passage:null,
+    questions:[
+      {id:'q7',
+       text:'During a group discussion, a classmate makes a point you do not understand. What is the BEST thing to do?',
+       opts:['A. Ignore it and wait for the next speaker','B. Ask for clarification: "Can you explain what you mean?"','C. Change the subject','D. Stay quiet and hope someone else asks'],
+       ans:1,
+       ccss:'SL.4.1',domain:'Speaking & Listening',
+       feedback:'Correct! Asking for clarification shows you are listening actively and helps the whole group understand better.'},
+      {id:'q8',
+       text:'Your teacher reads a paragraph about the water cycle. Which response BEST shows that you paraphrased the information?',
+       opts:['A. "She said: Water goes up and comes back down."','B. "Water evaporates from the ocean, rises into the air, forms clouds, and falls as rain or snow."','C. "Water cycle."','D. "I like rain."'],
+       ans:1,
+       ccss:'SL.4.2',domain:'Speaking & Listening',
+       feedback:'Correct! Paraphrasing means restating information in your own words while keeping the key details.'},
+      {id:'q9',
+       text:'Which behavior shows that you are following the rules of a collaborative discussion?',
+       opts:['A. Talking at the same time as your partner','B. Waiting for your turn and building on others\' ideas','C. Only sharing your own ideas and not listening','D. Staying silent the whole time'],
+       ans:1,
+       ccss:'SL.4.1',domain:'Speaking & Listening',
+       feedback:'Correct! Good discussion rules include taking turns, listening, and building on others\' ideas.'},
+      {id:'q10',
+       text:'Your teacher shows a bar graph about rainfall and explains what it means. To confirm your understanding, what should you do?',
+       opts:['A. Copy the graph exactly','B. Tell a partner in your own words what the graph showed','C. Write down exactly every word the teacher said','D. Ask the teacher to show the graph again without explanation'],
+       ans:1,
+       ccss:'SL.4.2',domain:'Speaking & Listening',
+       feedback:'Correct! Telling a partner in your own words proves you understood the visual information — this is paraphrasing what was presented.'},
+    ]
+  },
+  {
+    id:'s3', title:'Section 3: Textual Evidence & Inferences',
+    icon:'🔍', ccss:'RL.4.1',
+    desc:'Use the passage "The Crow and the Pitcher" to answer questions 11–16',
+    passage:{
+      title:'The Crow and the Pitcher',
+      text:`<p><span class="para-num">[1]</span> On a blazing summer afternoon, a crow flew over the dry, dusty plains searching desperately for water. Her throat burned and her wings felt heavier with every beat. She had been flying for hours without any luck, and she began to fear that she might not survive the day.</p>
+<p><span class="para-num">[2]</span> Just as she was about to give up, she spotted a tall clay pitcher sitting in the shade of an olive tree. With her last bit of strength, she dove down and peered inside. Her heart leaped — there was water! But when she tried to dip her beak in, she discovered that the water level was far too low to reach.</p>
+<p><span class="para-num">[3]</span> The crow sat back and thought carefully. She was too small to knock the pitcher over. She was too weak to carry it anywhere. But she was not willing to give up. "There must be a way," she said quietly to herself.</p>
+<p><span class="para-num">[4]</span> Then she noticed the small pebbles scattered on the ground around the tree. One by one, she picked them up in her beak and dropped them into the pitcher. With each pebble, the water rose a little higher. After many trips — and a great deal of patience — the water finally reached a level she could drink from.</p>
+<p><span class="para-num">[5]</span> She drank deeply and rested in the cool shade. As she sat there, she thought: the world does not always give you an easy path, but a clear mind and steady effort will almost always find one.</p>`
+    },
+    questions:[
+      {id:'q11',
+       text:'According to paragraph 4, how did the crow raise the water level in the pitcher?',
+       opts:['A. She knocked the pitcher over','B. She carried the pitcher to a river','C. She dropped pebbles into the pitcher one by one','D. She waited for rain to fill it up'],
+       ans:2,
+       ccss:'RL.4.1',domain:'Reading Literature',
+       feedback:'Correct! Paragraph 4 states explicitly that she "picked them [pebbles] up in her beak and dropped them into the pitcher."'},
+      {id:'q12',
+       text:'Based on paragraph 1, what can you INFER about how the crow was feeling before she found the pitcher?',
+       opts:['A. She was happy and well-rested','B. She was desperate and afraid she might not survive','C. She was bored and looking for adventure','D. She was angry at the dry weather'],
+       ans:1,
+       ccss:'RL.4.1',domain:'Reading Literature',
+       feedback:'Correct! Paragraph 1 says her "throat burned," her wings felt heavy, and she "began to fear that she might not survive." These clues let you infer she was desperate and frightened.'},
+      {id:'q13',
+       text:'Which sentence from the passage is EXPLICIT information (directly stated)?',
+       opts:['A. The crow was an intelligent bird who had studied physics.','B. "One by one, she picked them up in her beak and dropped them into the pitcher."','C. The crow had tried this trick many times before.','D. The olive tree belonged to a farmer who left the pitcher there.'],
+       ans:1,
+       ccss:'RL.4.1',domain:'Reading Literature',
+       feedback:'Correct! Explicit information is stated directly in the text. Option B is a direct quote from paragraph 4.'},
+      {id:'q14',
+       text:'Which detail BEST supports the idea that the crow was determined not to give up?',
+       opts:['A. "Her throat burned and her wings felt heavier with every beat."','B. "She had been flying for hours without any luck."','C. \'"There must be a way," she said quietly to herself.\'','D. "She drank deeply and rested in the cool shade."'],
+       ans:2,
+       ccss:'RL.4.1',domain:'Reading Literature',
+       feedback:'Correct! The detail in option C — the crow saying "There must be a way" — directly shows her determination and refusal to quit.'},
+      {id:'q15',
+       text:'In paragraph 3, the crow says "There must be a way." What can you INFER about her based on this?',
+       opts:['A. She is lazy and hoping someone will help her','B. She is a problem-solver who thinks before acting','C. She is confused and does not know what to do','D. She is afraid and ready to fly away'],
+       ans:1,
+       ccss:'RL.4.1',domain:'Reading Literature',
+       feedback:'Correct! By thinking before acting and refusing to give up, the crow shows she is a creative problem-solver. This is an inference drawn from her actions and words.'},
+      {id:'q16',
+       text:'Which piece of information in the passage is IMPLICIT (not directly stated but can be figured out)?',
+       opts:['A. The crow found a pitcher under an olive tree','B. The crow dropped pebbles into the pitcher','C. The crow understood that adding solid objects raises the water level','D. The water level was too low for the crow to reach at first'],
+       ans:2,
+       ccss:'RL.4.1',domain:'Reading Literature',
+       feedback:'Correct! The passage never states that the crow understood the science behind displacement. You must infer this from her actions — she figured it out on her own.'},
+    ]
+  },
+  {
+    id:'s4', title:'Section 4: Characters, Setting & Plot',
+    icon:'📖', ccss:'RL.4.3',
+    desc:'Continue using "The Crow and the Pitcher" to answer questions 17–24',
+    passage:null,
+    questions:[
+      {id:'q17',
+       text:'Based on the passage, which THREE words BEST describe the crow\'s character?',
+       opts:['A. Lazy, selfish, and loud','B. Determined, clever, and patient','C. Fearful, weak, and confused','D. Jealous, reckless, and proud'],
+       ans:1,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! The crow shows determination (won\'t give up), cleverness (uses pebbles), and patience (makes many trips).'},
+      {id:'q18',
+       text:'Which action from the passage BEST reveals that the crow is a problem-solver?',
+       opts:['A. She spotted the pitcher from far away','B. She drank deeply and rested in the shade','C. She thought carefully and then used pebbles to raise the water','D. She flew over dry, dusty plains for hours'],
+       ans:2,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! Using pebbles to raise the water level is the action that best shows she thought through the problem and found a creative solution.'},
+      {id:'q19',
+       text:'What is the SETTING of the story?',
+       opts:['A. A rainy forest on a cold winter morning','B. A desert city with tall buildings','C. A dry, dusty plain with an olive tree on a hot summer afternoon','D. A farm beside a river in spring'],
+       ans:2,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! Paragraph 1 describes "a blazing summer afternoon" and "dry, dusty plains." Paragraph 2 mentions an olive tree. Together these details create the setting.'},
+      {id:'q20',
+       text:'How does the SETTING affect the crow\'s problem?',
+       opts:['A. The cold weather makes it impossible to fly','B. The hot, dry environment means there is very little water to find, making the crow desperate','C. The olive trees provide plenty of food for the crow','D. The setting has no effect on the crow\'s problem'],
+       ans:1,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! The hot, dry setting is the direct cause of the crow\'s problem — there is no water, which makes her situation urgent and dangerous.'},
+      {id:'q21',
+       text:'What is the MAIN problem in the story?',
+       opts:['A. The crow does not know how to fly','B. The crow cannot find food to eat','C. The crow finds water but cannot reach it','D. The pitcher is too heavy to move'],
+       ans:2,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! The main problem is stated in paragraph 2: the crow finds water but the level is too low for her to reach.'},
+      {id:'q22',
+       text:'Which event is the RISING ACTION of the story?',
+       opts:['A. The crow finds a pitcher under an olive tree','B. The crow collects pebbles and drops them into the pitcher one by one','C. The crow drinks water and rests in the shade','D. The crow flies over the dry plains searching for water'],
+       ans:1,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! The rising action is the series of events that build toward solving the problem. The crow collecting and dropping pebbles is the key action that builds tension.'},
+      {id:'q23',
+       text:'What is the CLIMAX (the most exciting turning point) of the story?',
+       opts:['A. The crow first sees the pitcher from far away','B. The crow cannot reach the water and sits back to think','C. The water finally rises high enough for the crow to drink','D. The crow flies home after resting'],
+       ans:2,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! The climax is when the water finally reaches a drinkable level — the moment of highest tension resolves into success.'},
+      {id:'q24',
+       text:'What is the RESOLUTION of the story?',
+       opts:['A. The crow gives up and flies away thirsty','B. Another bird brings water to the crow','C. The crow drinks the water and rests, reflecting on the lesson learned','D. The crow knocks the pitcher over'],
+       ans:2,
+       ccss:'RL.4.3',domain:'Reading Literature',
+       feedback:'Correct! The resolution is in paragraph 5: the crow drinks, rests, and reflects on the lesson — "a clear mind and steady effort will almost always find one."'},
+    ]
+  },
+  {
+    id:'s5', title:'Section 5: Summarizing Literature',
+    icon:'📑', ccss:'RL.4.2',
+    desc:'Show your understanding of summarizing a literary text',
+    passage:null,
+    questions:[
+      {id:'q25',
+       text:'Which summary of "The Crow and the Pitcher" is the BEST?',
+       opts:['A. A crow was thirsty and flew around for a long time. Eventually it found water and was happy. The end.','B. A crow dying of thirst finds a pitcher of water she cannot reach, uses pebbles to raise the water level, and drinks — learning that patience and problem-solving can overcome obstacles.','C. A crow lived in a forest and liked to collect stones near an old tree. She was very clever and enjoyed puzzles.','D. In a hot place, a crow was flying. She found a pitcher. The pitcher had water in it. She used rocks. She drank.'],
+       ans:1,
+       ccss:'RL.4.2',domain:'Reading Literature',
+       feedback:'Correct! A good summary includes the main character, the problem, the key action taken to solve it, and the outcome — all in concise form.'},
+      {id:'q26',
+       text:'A good summary of a story should include…',
+       opts:['A. Every single detail and description from the story','B. Only what you personally found interesting','C. The main character, the key problem, the most important events, and how it ends','D. The theme only, with no mention of plot events'],
+       ans:2,
+       ccss:'RL.4.2',domain:'Reading Literature',
+       feedback:'Correct! A strong summary covers the essential elements: character, problem, key events, and resolution — without minor details or personal opinions.'},
+      {id:'q27',
+       text:'Which detail is LEAST important to include in a summary of "The Crow and the Pitcher"?',
+       opts:['A. The crow was desperately thirsty','B. The water level was too low to reach','C. The crow rested in the shade after drinking','D. The crow used pebbles to raise the water'],
+       ans:2,
+       ccss:'RL.4.2',domain:'Reading Literature',
+       feedback:'Correct! "The crow rested in the shade" is a minor detail. A summary should focus on the problem and how it was solved — not every small action at the end.'},
+      {id:'q28',
+       text:'Which statement about summaries is TRUE?',
+       opts:['A. A summary should be as long as the original text','B. A summary includes the writer\'s personal opinions about the story','C. A summary only needs to name the characters, nothing else','D. A summary retells the most important ideas in your own words without personal opinions'],
+       ans:3,
+       ccss:'RL.4.2',domain:'Reading Literature',
+       feedback:'Correct! A summary is a concise, objective restatement of the most important ideas in your own words — no personal opinions, no unnecessary details.'},
+    ]
+  },
+  {
+    id:'s6', title:'Section 6: Speaking Task',
+    icon:'🎤', ccss:'SL.4.1 · SL.4.2 · RL.4.2 · RL.4.3',
+    desc:'Read the short story below, then record your spoken response',
+    passage:null,
+    questions:[], oral:true
+  }
+];
+
+const ORAL_STORY = {
+  title:'The Old Lighthouse Keeper',
+  text:`<p>Old Thomas had lived alone in the lighthouse on Grey Rock Island for twenty years. Every night, without fail, he climbed the narrow spiral staircase and lit the great lamp so that sailors at sea could find their way safely to shore.</p>
+<p>One stormy November night, a fierce gale rattled the lighthouse windows and knocked out the island's power supply. Thomas heard the engine go silent and knew immediately what had to be done. Ignoring his aching knees, he climbed to the storeroom and dug out the emergency oil lantern he had kept since his very first year on the island.</p>
+<p>He lit it with trembling hands and carried it carefully up to the lamp room. It was far dimmer than the electric light, but it was steady and bright enough to be seen for miles. That night, it guided a fishing vessel safely past the deadly rocks below.</p>
+<p>The next morning, the captain of the fishing vessel came ashore to find Thomas. "You saved my crew last night," she told him, her voice thick with emotion. Thomas smiled quietly. "That's what I'm here for," he said. "The light must never go out."</p>`
+};
+
+const ORAL_PROMPTS = [
+  'Describe the MAIN CHARACTER (Thomas) — what kind of person is he? Use at least TWO details from the story.',
+  'Describe the SETTING — where and when does the story take place? How does it affect the events?',
+  'Summarize the PLOT — explain what happens at the beginning, middle, and end of the story.',
+  'Share at least ONE piece of TEXT EVIDENCE that supports your description of Thomas\'s character.'
+];
+
+// ══════════════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════════════
+let currentSec = 0;
+let timerInterval = null;
+let timeLeft = 3600;
+let answers = {}; // qid → selected index
+let mediaRecorder = null;
+let audioChunks = [];
+let recState = 'idle'; // idle | recording | done
+let recSeconds = 0;
+let recInterval = null;
+
+// ══════════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════════
+function startTest(){
+  const name = document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your name before starting.');return;}
+  document.getElementById('hdr-student').textContent = name;
+  document.getElementById('cover').classList.remove('active');
+  document.getElementById('test').classList.add('active');
+  renderSec(0);
+  buildDots();
+  startTimer();
+}
+
+function buildDots(){
+  const wrap = document.getElementById('sec-dots');
+  wrap.innerHTML = '';
+  SECTIONS.forEach((_,i)=>{
+    const d = document.createElement('div');
+    d.className='sec-dot'+(i===0?' active':'');
+    d.onclick=()=>goSec(i);
+    wrap.appendChild(d);
+  });
+}
+
+function updateDots(){
+  document.querySelectorAll('.sec-dot').forEach((d,i)=>{
+    d.className='sec-dot'+(i<currentSec?'done':(i===currentSec?'active':''));
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+// TIMER
+// ══════════════════════════════════════════════════════════
+function startTimer(){
+  timerInterval = setInterval(()=>{
+    timeLeft--;
+    const m = String(Math.floor(timeLeft/60)).padStart(2,'0');
+    const s = String(timeLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent = m+':'+s;
+    if(timeLeft<=300) document.getElementById('timer-box').classList.add('warn');
+    if(timeLeft<=0){clearInterval(timerInterval);submitTest();}
+  },1000);
+}
+
+// ══════════════════════════════════════════════════════════
+// RENDER SECTION
+// ══════════════════════════════════════════════════════════
+function renderSec(idx){
+  const sec = SECTIONS[idx];
+  const body = document.getElementById('t-body');
+  body.innerHTML='';
+
+  // section header
+  const hd = document.createElement('div');
+  hd.className='sec-hd';
+  hd.innerHTML=`<div class="sec-icon">${sec.icon}</div>
+  <div>
+    <h3>${sec.title}</h3>
+    <div class="sec-ccss">${sec.ccss}</div>
+    <div class="sec-desc">${sec.desc}</div>
+  </div>`;
+  body.appendChild(hd);
+
+  // passage (section 3 has its own; section 4 reminds students to refer back)
+  if(sec.passage){
+    const pb = document.createElement('div');
+    pb.className='passage';
+    pb.innerHTML=`<div class="passage-top">
+      <div class="passage-title">📖 ${sec.passage.title}</div>
+      <button class="tts-btn" onclick="readPassage(this,'${sec.id}')">🔊 Read Aloud</button>
+    </div>
+    <div class="passage-text" id="passage-text-${sec.id}">${sec.passage.text}</div>`;
+    body.appendChild(pb);
+  }
+  if(idx===3){
+    const ref = document.createElement('div');
+    ref.style.cssText='background:var(--light);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:.88rem;font-weight:600;color:var(--teal)';
+    ref.innerHTML='📖 Refer to <strong>"The Crow and the Pitcher"</strong> from Section 3 to answer these questions.';
+    body.appendChild(ref);
+  }
+
+  // questions
+  if(!sec.oral){
+    sec.questions.forEach((q,qi)=>{
+      const totalBefore = SECTIONS.slice(0,idx).reduce((a,s)=>a+(s.questions?.length||0),0);
+      const qNum = totalBefore + qi + 1;
+      body.appendChild(buildQCard(q, qNum));
+    });
+  }
+
+  // oral section
+  if(sec.oral){
+    body.appendChild(buildOralSection());
+  }
+
+  // update nav
+  updateProgress();
+  updateDots();
+  document.getElementById('q-counter').textContent=`Section ${idx+1} of ${SECTIONS.length}`;
+  document.getElementById('nav-info').textContent=`Section ${idx+1} of ${SECTIONS.length}`;
+  document.getElementById('btn-prev').disabled = idx===0;
+
+  const isLast = idx===SECTIONS.length-1;
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.textContent = isLast ? 'Submit Test ✓' : 'Next →';
+  nextBtn.className = 'btn-nav '+(isLast?'btn-submit':'btn-next');
+
+  body.scrollIntoView({behavior:'smooth',block:'start'});
+  window.scrollTo(0,0);
+}
+
+function buildQCard(q, num){
+  const card = document.createElement('div');
+  card.className='q-card';
+  card.id='card-'+q.id;
+  const letters=['A','B','C','D'];
+  card.innerHTML=`
+  <div class="q-meta">
+    <span class="q-badge num">Q${num}</span>
+    <span class="q-badge ccss">${q.ccss}</span>
+    <span class="q-badge domain">${q.domain}</span>
+  </div>
+  <div class="q-text">${q.text}</div>
+  <div class="options" id="opts-${q.id}">
+    ${q.opts.map((o,i)=>`
+    <div class="opt${answers[q.id]===i?' selected':''}" id="opt-${q.id}-${i}" onclick="selectOpt('${q.id}',${i},${q.ans})">
+      <div class="opt-letter">${letters[i]}</div>
+      <span>${o.substring(3)}</span>
+    </div>`).join('')}
+  </div>
+  <div class="q-feedback${answers[q.id]!==undefined?' show '+(answers[q.id]===q.ans?'ok':'no'):''}" id="fb-${q.id}">
+    ${answers[q.id]!==undefined?(answers[q.id]===q.ans?'✅ '+q.feedback:'❌ Incorrect. The correct answer is <strong>'+q.opts[q.ans]+'</strong>. '+q.feedback):''}
+  </div>`;
+  if(answers[q.id]===undefined){
+    card.querySelector('.options').querySelectorAll('.opt').forEach((opt,i)=>{
+      if(answers[q.id]===undefined){} // keep clickable
+    });
+  } else {
+    // lock options
+    card.querySelectorAll('.opt').forEach((opt,i)=>{
+      opt.classList.add('locked');
+      opt.onclick=null;
+      if(i===q.ans) opt.classList.add('correct');
+      else if(i===answers[q.id] && answers[q.id]!==q.ans) opt.classList.add('wrong');
+    });
+  }
+  return card;
+}
+
+function selectOpt(qid, idx, ans){
+  if(answers[qid]!==undefined) return;
+  answers[qid]=idx;
+  const opts = document.querySelectorAll(`[id^="opt-${qid}-"]`);
+  opts.forEach((opt,i)=>{
+    opt.classList.remove('selected');
+    opt.classList.add('locked');
+    opt.onclick=null;
+    if(i===ans) opt.classList.add('correct');
+    else if(i===idx && idx!==ans) opt.classList.add('wrong');
+  });
+  const fb = document.getElementById('fb-'+qid);
+  const q = findQ(qid);
+  fb.className='q-feedback show '+(idx===ans?'ok':'no');
+  fb.innerHTML = idx===ans ? '✅ '+q.feedback : '❌ Incorrect. The correct answer is <strong>'+q.opts[ans]+'</strong>. '+q.feedback;
+  updateProgress();
+}
+
+function findQ(qid){
+  for(const sec of SECTIONS) if(sec.questions) for(const q of sec.questions) if(q.id===qid) return q;
+  return null;
+}
+
+function buildOralSection(){
+  const d = document.createElement('div');
+  d.className='oral-section';
+  d.innerHTML=`
+  <h3>🎤 Oral Response Task</h3>
+  <p class="sub">Read the story carefully, then record your spoken response. Aim for 1–2 minutes.</p>
+
+  <div class="story-card">
+    <h4>📖 ${ORAL_STORY.title}</h4>
+    <div class="passage-text">${ORAL_STORY.text}</div>
+  </div>
+
+  <div class="speak-prompts">
+    <h4>In your recording, address ALL of the following:</h4>
+    ${ORAL_PROMPTS.map((p,i)=>`<div class="prompt-item">
+      <div class="pn">${i+1}</div><span>${p}</span>
+    </div>`).join('')}
+  </div>
+
+  <div class="rec-area">
+    <button class="rec-btn idle" id="rec-btn" onclick="toggleRec()">🎤</button>
+    <div class="rec-status" id="rec-status">Click to start recording</div>
+    <div id="rec-timer" style="display:none">0:00</div>
+  </div>
+
+  <div id="audio-playback" style="margin-bottom:20px;display:none">
+    <p style="font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:8px">▶ Listen to your recording:</p>
+    <audio id="my-audio" controls style="width:100%;border-radius:8px"></audio>
+  </div>
+
+  <div style="margin-bottom:24px">
+    <label style="display:block;font-weight:700;font-size:.88rem;margin-bottom:8px;color:var(--navy)">📝 Optional: Teacher / Self-Assessment Notes</label>
+    <textarea style="width:100%;min-height:90px;border:2px solid var(--border);border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;resize:vertical;outline:none" placeholder="Notes about your response…" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+  </div>
+
+  <table class="rubric-table">
+    <thead><tr><th>Criterion</th><th>Points</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td>Character</td><td><span class="pts-badge">2</span></td><td>Names Thomas and describes his character with ≥2 text details</td></tr>
+      <tr><td>Setting</td><td><span class="pts-badge">2</span></td><td>Identifies the lighthouse on a stormy night and explains its effect on events</td></tr>
+      <tr><td>Plot (B/M/E)</td><td><span class="pts-badge">3</span></td><td>Covers beginning (Thomas's job), middle (power cut, old lantern), end (ship saved)</td></tr>
+      <tr><td>Text Evidence</td><td><span class="pts-badge">2</span></td><td>Uses ≥2 specific details from the story to support ideas</td></tr>
+      <tr><td>Clarity</td><td><span class="pts-badge">1</span></td><td>Speaks in complete sentences; easy to follow; stays on topic</td></tr>
+    </tbody>
+  </table>`;
+  return d;
+}
+
+// ══════════════════════════════════════════════════════════
+// RECORDING
+// ══════════════════════════════════════════════════════════
+async function toggleRec(){
+  if(recState==='idle'){
+    try{
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks=[];
+      mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);
+      mediaRecorder.onstop=()=>{
+        const blob = new Blob(audioChunks,{type:'audio/webm'});
+        const url = URL.createObjectURL(blob);
+        document.getElementById('my-audio').src=url;
+        document.getElementById('audio-playback').style.display='block';
+      };
+      mediaRecorder.start();
+      recState='recording';
+      recSeconds=0;
+      document.getElementById('rec-btn').className='rec-btn recording';
+      document.getElementById('rec-btn').textContent='⏹';
+      document.getElementById('rec-status').textContent='Recording… click to stop';
+      document.getElementById('rec-timer').style.display='block';
+      recInterval=setInterval(()=>{
+        recSeconds++;
+        const m=Math.floor(recSeconds/60);
+        const s=String(recSeconds%60).padStart(2,'0');
+        document.getElementById('rec-timer').textContent=m+':'+s;
+      },1000);
+    } catch(e){
+      alert('Microphone access is required. Please allow microphone access in your browser and try again.');
+    }
+  } else if(recState==='recording'){
+    mediaRecorder.stop();
+    clearInterval(recInterval);
+    recState='done';
+    document.getElementById('rec-btn').className='rec-btn done';
+    document.getElementById('rec-btn').textContent='✓';
+    document.getElementById('rec-status').textContent='Recording saved! You can listen back above.';
+  }
+}
+
+// ══════════════════════════════════════════════════════════
+// TTS
+// ══════════════════════════════════════════════════════════
+function readPassage(btn, secId){
+  if(btn.classList.contains('speaking')){
+    window.speechSynthesis.cancel();
+    btn.classList.remove('speaking');
+    btn.textContent='🔊 Read Aloud';
+    return;
+  }
+  const el = document.getElementById('passage-text-'+secId);
+  if(!el) return;
+  const text = el.innerText;
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.rate=0.9; utt.pitch=1;
+  utt.onend=()=>{btn.classList.remove('speaking');btn.textContent='🔊 Read Aloud';};
+  window.speechSynthesis.speak(utt);
+  btn.classList.add('speaking');
+  btn.textContent='⏹ Stop';
+}
+
+// ══════════════════════════════════════════════════════════
+// NAVIGATION
+// ══════════════════════════════════════════════════════════
+function prevSec(){if(currentSec>0){currentSec--;renderSec(currentSec);}}
+function nextSec(){
+  if(currentSec<SECTIONS.length-1){currentSec++;renderSec(currentSec);}
+  else{submitTest();}
+}
+function goSec(i){currentSec=i;renderSec(i);}
+
+function updateProgress(){
+  const allQ = SECTIONS.flatMap(s=>s.questions||[]);
+  const answered = allQ.filter(q=>answers[q.id]!==undefined).length;
+  const pct = Math.round(answered/allQ.length*100);
+  document.getElementById('prog-fill').style.width=pct+'%';
+}
+
+// ══════════════════════════════════════════════════════════
+// SUBMIT & RESULTS
+// ══════════════════════════════════════════════════════════
+function submitTest(){
+  clearInterval(timerInterval);
+  window.speechSynthesis.cancel();
+
+  // score
+  const allQ = SECTIONS.flatMap(s=>s.questions||[]);
+  let correct=0;
+  allQ.forEach(q=>{if(answers[q.id]===q.ans)correct++;});
+  const total=allQ.length;
+  const pct=Math.round(correct/total*100);
+
+  // domain breakdown
+  const domains={};
+  allQ.forEach(q=>{
+    if(!domains[q.domain])domains[q.domain]={correct:0,total:0};
+    domains[q.domain].total++;
+    if(answers[q.id]===q.ans)domains[q.domain].correct++;
+  });
+
+  // show results
+  document.getElementById('test').classList.remove('active');
+  document.getElementById('results').classList.add('active');
+
+  const name=document.getElementById('student-name').value;
+  document.getElementById('student-display').textContent=name;
+  document.getElementById('score-pct').textContent=pct+'%';
+  document.getElementById('score-raw').textContent=correct+' / '+total+' questions';
+
+  // animate arc (427 = circumference of r68 circle)
+  setTimeout(()=>{
+    const offset=427-(427*(pct/100));
+    document.getElementById('score-arc').style.strokeDashoffset=offset;
+  },300);
+
+  // domain breakdown
+  const dWrap=document.getElementById('domain-breakdown');
+  dWrap.innerHTML='';
+  Object.entries(domains).forEach(([dom,data])=>{
+    const dpct=Math.round(data.correct/data.total*100);
+    dWrap.innerHTML+=`<div class="domain-row">
+      <div class="domain-label">${dom}</div>
+      <div class="domain-bar-wrap"><div class="domain-bar" style="width:0%" data-w="${dpct}%"></div></div>
+      <div class="domain-score">${data.correct}/${data.total}</div>
+    </div>`;
+  });
+  setTimeout(()=>{
+    document.querySelectorAll('.domain-bar').forEach(b=>b.style.width=b.dataset.w);
+  },500);
+
+  // answer review
+  const revWrap=document.getElementById('answer-review');
+  revWrap.innerHTML='';
+  let qNum=0;
+  SECTIONS.forEach(sec=>{
+    if(!sec.oral && sec.questions.length){
+      const secLbl=document.createElement('p');
+      secLbl.style.cssText='font-weight:700;font-size:.82rem;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px';
+      secLbl.textContent=sec.title;
+      revWrap.appendChild(secLbl);
+      sec.questions.forEach(q=>{
+        qNum++;
+        const ok=answers[q.id]===q.ans;
+        const r=document.createElement('div');
+        r.className='rev-item '+(ok?'ok':'no');
+        r.innerHTML=`<div class="rev-icon">${ok?'✅':'❌'}</div>
+        <div>
+          <div class="rev-q">Q${qNum}. ${q.text}</div>
+          <div class="rev-ans">${ok?'Correct: '+q.opts[q.ans]:'Your answer: '+(answers[q.id]!==undefined?q.opts[answers[q.id]]:'Not answered')+' · Correct: '+q.opts[q.ans]}</div>
+        </div>`;
+        revWrap.appendChild(r);
+      });
+    }
+  });
+
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
