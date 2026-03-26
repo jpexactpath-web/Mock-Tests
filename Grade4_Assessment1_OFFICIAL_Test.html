@@ -214,6 +214,33 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 .modal-cancel{background:var(--light);color:var(--navy)}
 .modal-confirm{background:var(--teal);color:white}
 
+/* ══ EMAILJS SETUP MODAL ═════════════════════════════ */
+.setup-modal-overlay{
+  position:fixed;inset:0;background:rgba(15,39,68,.65);
+  z-index:500;display:none;align-items:center;justify-content:center;padding:20px;
+}
+.setup-modal-overlay.show{display:flex}
+.setup-modal{
+  background:var(--white);border-radius:20px;padding:36px 32px;
+  max-width:500px;width:100%;box-shadow:var(--shadow-lg);
+}
+.setup-modal h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--navy);margin-bottom:6px}
+.setup-modal .setup-sub{font-size:.83rem;color:var(--mid);margin-bottom:22px;line-height:1.6}
+.setup-modal .setup-sub a{color:var(--teal);font-weight:700;text-decoration:none}
+.setup-field{margin-bottom:14px}
+.setup-field label{display:block;font-size:.78rem;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.setup-field input{width:100%;border:2px solid var(--border);border-radius:9px;padding:11px 14px;font-family:'DM Sans',sans-serif;font-size:.92rem;color:var(--navy);outline:none;transition:border .2s}
+.setup-field input:focus{border-color:var(--teal)}
+.setup-field .hint{font-size:.74rem;color:var(--mid);margin-top:4px}
+.setup-modal-btns{display:flex;gap:10px;margin-top:20px}
+.setup-modal-btns button{flex:1;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer}
+.btn-setup-cancel{background:var(--light);color:var(--navy)}
+.btn-setup-save{background:var(--teal);color:white}
+.btn-setup-save:hover{background:#0a6358}
+.setup-saved-bar{display:flex;align-items:center;justify-content:space-between;background:#e6f9ee;border:2px solid #a8dfc0;border-radius:10px;padding:12px 16px;margin-bottom:16px}
+.setup-saved-bar span{font-size:.85rem;font-weight:600;color:#1a5c35}
+.setup-saved-bar button{background:none;border:2px solid #1a5c35;border-radius:7px;padding:4px 12px;font-size:.78rem;font-weight:700;color:#1a5c35;cursor:pointer}
+.setup-saved-bar button:hover{background:#1a5c35;color:white}
 /* ══ TWO-COLUMN PASSAGE LAYOUT (sections 3-5) ════════ */
 .split-layout{
   display:grid;
@@ -460,15 +487,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
         Complete all steps below. The email sends your MCQ score automatically.
         Your audio recording must be downloaded and submitted separately.
       </p>
+      <div class="setup-saved-bar" id="setup-saved-bar" style="display:none">
+        <span> EmailJS configured — ready to send</span>
+        <button onclick="openSetupModal()">Edit Credentials</button>
+      </div>
       <div id="emailjs-notice" class="setup-notice">
-        <strong> Teacher Setup Required (one-time) — 5 minutes</strong>
-        1. Create a free account at <strong>emailjs.com</strong><br>
-        2. Add your email service (Gmail/Outlook) → copy the <strong>Service ID</strong><br>
-        3. Create a template: Subject = <code>{{subject}}</code> · Body = <code>{{message}}</code> · <strong>hardcode your own email in the "To" field</strong> (do NOT use a variable)<br>
-        4. Copy the <strong>Template ID</strong> and <strong>Public Key</strong> (Account → API Keys)<br>
-        5. Open this HTML file in a text editor, fill in <code>EMAILJS_CONFIG</code>, and save
+        <strong> EmailJS not yet configured</strong><br>
+        Click <strong>"Configure EmailJS"</strong> below to enter your credentials directly in the browser — no text editing needed.
       </div>
       <div class="delivery-grid">
+        <button class="del-btn email" id="btn-configure" onclick="openSetupModal()" style="background:#6c3483">
+           Configure EmailJS
+        </button>
         <button class="del-btn email" id="btn-send-email" onclick="sendScoreEmail()">
            Email via EmailJS
         </button>
@@ -490,35 +520,103 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
   </div>
 </div>
 
+<!-- EMAILJS SETUP MODAL -->
+<div class="setup-modal-overlay" id="setup-modal-overlay">
+  <div class="setup-modal">
+    <h3> EmailJS Setup</h3>
+    <p class="setup-sub">
+      Enter your <a href="https://www.emailjs.com" target="_blank">EmailJS</a> credentials below.
+      Saved in your browser — only needed once per device.<br><br>
+      <strong>Template:</strong> Subject = <code style="background:#f4f6fa;padding:1px 5px;border-radius:4px">{{subject}}</code> &nbsp;·&nbsp;
+      Body = <code style="background:#f4f6fa;padding:1px 5px;border-radius:4px">{{message}}</code> &nbsp;·&nbsp;
+      <strong>"To" field = your actual email address</strong> (not a variable).
+    </p>
+    <div class="setup-field">
+      <label>Public Key</label>
+      <input type="text" id="inp-pubkey" placeholder="e.g. aBcDeFgHiJkLmNoP" autocomplete="off" spellcheck="false">
+      <div class="hint">Account → API Keys → Public Key</div>
+    </div>
+    <div class="setup-field">
+      <label>Service ID</label>
+      <input type="text" id="inp-service" placeholder="e.g. service_xxxxxxx" autocomplete="off" spellcheck="false">
+      <div class="hint">Email Services → your connected service</div>
+    </div>
+    <div class="setup-field">
+      <label>Template ID</label>
+      <input type="text" id="inp-template" placeholder="e.g. template_xxxxxxx" autocomplete="off" spellcheck="false">
+      <div class="hint">Email Templates → your template</div>
+    </div>
+    <div class="setup-field">
+      <label>Your Email (for Mail App fallback)</label>
+      <input type="email" id="inp-email" placeholder="e.g. teacher@school.com" autocomplete="off">
+      <div class="hint">Must match the "To" email hardcoded in your EmailJS template</div>
+    </div>
+    <div id="setup-modal-err" style="display:none;background:#fdeaea;border-radius:8px;padding:10px 14px;font-size:.83rem;font-weight:600;color:#8c1c1c;margin-top:10px"></div>
+    <div class="setup-modal-btns">
+      <button class="btn-setup-cancel" onclick="closeSetupModal()">Cancel</button>
+      <button class="btn-setup-save" onclick="saveEmailJSConfig()">Save &amp; Connect</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ══════════════════════════════════════════════════════════
-//   TEACHER SETUP — fill in your EmailJS credentials here
-// ──────────────────────────────────────────────────────────
-// 1. Go to https://www.emailjs.com → free account (200/month)
-// 2. Click "Email Services" → Add Service (Gmail / Outlook) → copy Service ID
-// 3. Click "Email Templates" → Create Template
-//    • Subject field:  {{subject}}
-//    • Body field:     {{message}}
-//    • "To Email":     TYPE YOUR OWN EMAIL DIRECTLY in the To field
-//                      (do NOT use a variable here — that causes the 412 error)
-//    Save the template → copy the Template ID
-// 4. Click your account name (top right) → "API Keys" → copy Public Key
-// 5. Paste the three values below, then save and reopen this file
+// EMAILJS CONFIG — set via in-browser modal, stored in localStorage
 // ══════════════════════════════════════════════════════════
-const EMAILJS_CONFIG = {
-  publicKey:  'YOUR_PUBLIC_KEY',   // e.g. 'aBcDeFgHiJkLmNoP'
-  serviceId:  'YOUR_SERVICE_ID',   // e.g. 'service_xxxxxxx'
-  templateId: 'YOUR_TEMPLATE_ID',  // e.g. 'template_xxxxxxx'
-  // Your email — used for the mailto fallback only (EmailJS To is set in the dashboard)
-  teacherEmail: 'YOUR_EMAIL@example.com'
-};
-// ══════════════════════════════════════════════════════════
+const LS_KEY = 'ejsConfig_grade4_official';
+
+function loadEmailJSConfig(){
+  try{ return JSON.parse(localStorage.getItem(LS_KEY))||{}; }
+  catch(e){ return {}; }
+}
+
+function saveEmailJSConfig(){
+  const pub  = document.getElementById('inp-pubkey').value.trim();
+  const svc  = document.getElementById('inp-service').value.trim();
+  const tmpl = document.getElementById('inp-template').value.trim();
+  const mail = document.getElementById('inp-email').value.trim();
+  const err  = document.getElementById('setup-modal-err');
+  if(!pub||!svc||!tmpl){
+    err.style.display='block';
+    err.textContent='⚠️ Please fill in the Public Key, Service ID, and Template ID.';
+    return;
+  }
+  err.style.display='none';
+  const cfg={publicKey:pub,serviceId:svc,templateId:tmpl,teacherEmail:mail};
+  localStorage.setItem(LS_KEY,JSON.stringify(cfg));
+  emailjs.init({publicKey:pub});
+  applyConfigUI(cfg);
+  closeSetupModal();
+  const status=document.getElementById('send-status');
+  status.className='send-status show ok';
+  status.textContent='✅ EmailJS configured! You can now send score reports.';
+}
+
+function applyConfigUI(cfg){
+  const has=cfg.publicKey&&cfg.publicKey.length>4;
+  document.getElementById('emailjs-notice').style.display   =has?'none':'block';
+  document.getElementById('setup-saved-bar').style.display  =has?'flex':'none';
+}
+
+function openSetupModal(){
+  const cfg=loadEmailJSConfig();
+  document.getElementById('inp-pubkey').value  =cfg.publicKey   ||'';
+  document.getElementById('inp-service').value =cfg.serviceId   ||'';
+  document.getElementById('inp-template').value=cfg.templateId  ||'';
+  document.getElementById('inp-email').value   =cfg.teacherEmail||'';
+  document.getElementById('setup-modal-err').style.display='none';
+  document.getElementById('setup-modal-overlay').classList.add('show');
+}
+
+function closeSetupModal(){
+  document.getElementById('setup-modal-overlay').classList.remove('show');
+}
 
 (function(){
-  if(EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.publicKey !== 'YOUR_PUBLIC_KEY'){
-    emailjs.init({publicKey: EMAILJS_CONFIG.publicKey});
-    document.getElementById('emailjs-notice').style.display='none';
-  }
+  const cfg=loadEmailJSConfig();
+  if(cfg.publicKey){emailjs.init({publicKey:cfg.publicKey});}
+  document.addEventListener('DOMContentLoaded',()=>applyConfigUI(cfg));
+  if(document.readyState!=='loading')applyConfigUI(cfg);
 })();
 
 const SECTIONS = [
@@ -1178,19 +1276,14 @@ function buildScoreData(){
 }
 
 async function sendScoreEmail(){
-  const btn=document.getElementById('btn-send-email');
-  const status=document.getElementById('send-status');
-  if(!EMAILJS_CONFIG.publicKey||EMAILJS_CONFIG.publicKey==='YOUR_PUBLIC_KEY'){
-    status.className='send-status show err';
-    status.innerHTML='⚠️ EmailJS not configured. Use the <strong>📬 Mail App</strong> button instead, or fill in EMAILJS_CONFIG and reload.';
-    return;
-  }
-  btn.textContent='⏳ Sending…'; btn.disabled=true;
+  const btn    =document.getElementById('btn-send-email');
+  const status =document.getElementById('send-status');
+  const cfg    =loadEmailJSConfig();
+  if(!cfg.publicKey){ openSetupModal(); return; }
+  btn.textContent=' Sending…'; btn.disabled=true;
   status.className='send-status show sending';
   status.textContent='Sending…';
   const d=buildScoreData();
-  // Two-variable template only: {{subject}} and {{message}}
-  // "To" email must be hardcoded in your EmailJS template dashboard — NOT sent as a variable
   const params={
     subject:`[OFFICIAL] Grade 4 Assessment 1 — ${d.name} — ${d.score} (${d.pct}%)`,
     message:
@@ -1212,25 +1305,26 @@ ${d.detailsText}
 SPEAKING TASK
 ${'-'.repeat(40)}
 ${audioBlob
-  ?'Student downloaded their audio recording. Please ask them to submit it via email or Google Drive.'
+  ?'Student downloaded their audio recording. Please ask them to submit via email or Google Drive.'
   :'Student did NOT complete a spoken recording.'}
 ${'='.repeat(48)}
 Sent automatically from Grade 4 Assessment 1 (Official)`
   };
   try{
-    await emailjs.send(EMAILJS_CONFIG.serviceId,EMAILJS_CONFIG.templateId,params);
-    btn.className='del-btn email sent'; btn.textContent='✅ Sent!';
+    await emailjs.send(cfg.serviceId,cfg.templateId,params);
+    btn.className='del-btn email sent'; btn.textContent=' Sent!';
     status.className='send-status show ok';
-    status.textContent='✅ Score report sent via EmailJS successfully.';
+    status.textContent=' Score report sent via EmailJS successfully.';
   }catch(err){
-    btn.className='del-btn email error'; btn.textContent='❌ Failed — use 📬 Mail App'; btn.disabled=false;
+    btn.className='del-btn email error'; btn.textContent='❌ Failed'; btn.disabled=false;
     status.className='send-status show err';
     status.innerHTML=`❌ EmailJS error ${err.status||''}: ${err.text||err.message||JSON.stringify(err)}.<br>
-      <strong>Use the 📬 Mail App button instead</strong>, or check your template has exactly <code>{{subject}}</code> and <code>{{message}}</code> and your email is hardcoded in the "To" field.`;
+    Try the <strong> Mail App</strong> button, or click <strong>⚙️ Configure EmailJS</strong> to check your credentials.`;
   }
 }
 
 function sendMailto(){
+  const cfg=loadEmailJSConfig();
   const d=buildScoreData();
   const subject=encodeURIComponent(`[OFFICIAL] Grade 4 Assessment 1 — ${d.name} — ${d.score} (${d.pct}%)`);
   const body=encodeURIComponent(
@@ -1252,9 +1346,7 @@ ${audioBlob
   ?'Student downloaded audio recording — please ask them to attach it to this email.'
   :'Student did NOT complete a spoken recording.'}`
   );
-  const to=encodeURIComponent(
-    EMAILJS_CONFIG.teacherEmail!=='YOUR_EMAIL@example.com'?EMAILJS_CONFIG.teacherEmail:''
-  );
+  const to=encodeURIComponent(cfg.teacherEmail||'');
   window.location.href=`mailto:${to}?subject=${subject}&body=${body}`;
 }
 
@@ -1302,7 +1394,7 @@ function downloadScoreCard(){
   @media print{body{background:white;padding:0}.card{box-shadow:none;border-radius:0}}
 </style></head><body><div class="card">
   <div class="hdr">
-    <div class="tag">🏫 OFFICIAL TEST</div>
+    <div class="tag"> OFFICIAL TEST</div>
     <h1>Grade 4 Assessment 1</h1>
     <p style="opacity:.8;font-size:.9rem">Official Score Report · Language Arts · Weeks 1–11</p>
   </div>
@@ -1325,7 +1417,7 @@ function downloadScoreCard(){
   <table><thead><tr><th>#</th><th>Standard</th><th>Result</th><th>Correct Answer</th></tr></thead><tbody>
   ${(()=>{let rows='';let n=0;SECTIONS.forEach(sec=>{if(!sec.oral&&sec.questions){sec.questions.forEach(q=>{n++;const ok=answers[q.id]===q.ans;rows+=`<tr><td>${n}</td><td>${q.ccss}</td><td class="${ok?'ok':'no'}">${ok?'✓ Correct':'✗ Incorrect'}</td><td>${q.opts[q.ans].substring(3)}</td></tr>`;});}});return rows;})()}
   </tbody></table>
-  <div class="oral-box"><strong>🎤 Speaking Task (10 pts):</strong> To be scored by teacher from submitted audio recording. Combined total: ${d.correct} (MCQ) + teacher oral score / 38 pts.</div>
+  <div class="oral-box"><strong> Speaking Task (10 pts):</strong> To be scored by teacher from submitted audio recording. Combined total: ${d.correct} (MCQ) + teacher oral score / 38 pts.</div>
   <div class="footer">Grade 4 Language Arts · Exact Path Program · Official Assessment · ${d.date}</div>
 </div>
 <script>window.onload=()=>window.print()<\/script>
