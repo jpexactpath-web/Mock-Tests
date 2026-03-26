@@ -290,7 +290,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 <div id="cover" class="screen active">
   <div class="cover-card">
     <div class="official-seal">
-      <div class="seal-icon">🏫</div>
+      <div class="seal-icon"></div>
       <div class="seal-text">
         <div class="line1">Official Assessment · Grade 4</div>
         <div class="line2">Language Arts · Exact Path Program</div>
@@ -316,7 +316,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
       <input type="text" id="teacher-name" placeholder="Teacher's name…">
     </div>
     <div class="rules-box">
-      <h4>⚠️ Official Test Rules</h4>
+      <h4> Official Test Rules</h4>
       <ul>
         <li>This is an <strong>official assessment</strong> — no answer feedback will be given during the test</li>
         <li>Read each question and all options carefully before choosing</li>
@@ -382,7 +382,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 ══════════════════════════════════════════════════════ -->
 <div id="results" class="screen">
   <div class="results-header">
-    <div class="official-tag">🏫 Official Test Results</div>
+    <div class="official-tag"> Official Test Results</div>
     <h1>Assessment 1 – Grade 4</h1>
     <div class="results-meta" id="res-student"></div>
     <div class="results-meta" id="res-date"></div>
@@ -404,16 +404,16 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
       <p id="performance-msg" style="font-size:.92rem;color:var(--mid);line-height:1.6"></p>
     </div>
     <div class="results-section">
-      <h3>📊 Score by Standard</h3>
+      <h3> Score by Standard</h3>
       <div id="domain-breakdown"></div>
     </div>
     <div class="results-section">
-      <h3>📝 Question Review</h3>
+      <h3> Question Review</h3>
       <p style="font-size:.82rem;color:var(--mid);margin-bottom:14px">Correct answers are shown in green. Review any missed questions with your teacher.</p>
       <div id="answer-review"></div>
     </div>
     <div class="results-section">
-      <h3>🎤 Speaking Task – Teacher Scoring</h3>
+      <h3> Speaking Task – Teacher Scoring</h3>
       <p style="font-size:.88rem;color:var(--mid);margin-bottom:14px;line-height:1.6">
         Listen to the student's recording and enter scores below. Total oral score: <strong>10 points</strong>.
       </p>
@@ -455,13 +455,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
       <p style="font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy)" id="combined-score">__ / 38</p>
     </div>
     <div class="delivery-section">
-      <h3>📤 Submit Results to Teacher</h3>
+      <h3> Submit Results to Teacher</h3>
       <p class="sub">
         Complete all steps below. The email sends your MCQ score automatically.
         Your audio recording must be downloaded and submitted separately.
       </p>
       <div id="emailjs-notice" class="setup-notice">
-        <strong>⚙️ Teacher Setup Required (one-time) — 5 minutes</strong>
+        <strong> Teacher Setup Required (one-time) — 5 minutes</strong>
         1. Create a free account at <strong>emailjs.com</strong><br>
         2. Add your email service (Gmail/Outlook) → copy the <strong>Service ID</strong><br>
         3. Create a template: Subject = <code>{{subject}}</code> · Body = <code>{{message}}</code> · <strong>hardcode your own email in the "To" field</strong> (do NOT use a variable)<br>
@@ -470,19 +470,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
       </div>
       <div class="delivery-grid">
         <button class="del-btn email" id="btn-send-email" onclick="sendScoreEmail()">
-          📧 Email via EmailJS
+           Email via EmailJS
         </button>
         <button class="del-btn email" id="btn-mailto" onclick="sendMailto()" style="background:#2a6496">
-          📬 Open in Mail App (fallback)
+           Open in Mail App (fallback)
         </button>
         <button class="del-btn audio" id="btn-dl-audio" onclick="downloadAudio()">
-          🎤 Download Audio Recording
+           Download Audio Recording
         </button>
         <button class="del-btn card" onclick="downloadScoreCard()">
-          📄 Download Score Card (PDF)
+           Download Score Card (PDF)
         </button>
         <button class="del-btn download" onclick="window.print()" style="grid-column:span 2">
-          🖨️ Print Full Results
+           Print Full Results
         </button>
       </div>
       <div class="send-status" id="send-status"></div>
@@ -492,7 +492,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 
 <script>
 // ══════════════════════════════════════════════════════════
-// ⚙️  TEACHER SETUP — fill in your EmailJS credentials here
+//   TEACHER SETUP — fill in your EmailJS credentials here
 // ──────────────────────────────────────────────────────────
 // 1. Go to https://www.emailjs.com → free account (200/month)
 // 2. Click "Email Services" → Add Service (Gmail / Outlook) → copy Service ID
