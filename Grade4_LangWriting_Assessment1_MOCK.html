@@ -181,6 +181,50 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
   body{background:white}
   .q-card,.wr-card,.res-section,.sec-hd{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
 }
+/* ── Submission banner ── */
+.submit-banner{
+  border-radius:12px;padding:16px 20px;margin-bottom:20px;
+  font-size:.9rem;line-height:1.6;border:2px solid;
+  transition:all .3s;
+}
+/* ── Cover warning ── */
+.endpoint-warning{
+  display:none;background:#fff3cd;border:2px solid #f5d78e;
+  border-radius:10px;padding:14px 16px;margin-bottom:20px;
+  font-size:.84rem;color:#7a5500;line-height:1.6;
+}
+.endpoint-warning strong{display:block;margin-bottom:4px}
+.endpoint-warning code{background:#fdecc8;padding:1px 6px;border-radius:4px;font-family:monospace;font-size:.82rem}
+
+/* ── Formspree setup modal ── */
+.fs-modal-overlay{position:fixed;inset:0;background:rgba(15,39,68,.65);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.fs-modal-overlay.show{display:flex}
+.fs-modal{background:#fff;border-radius:20px;padding:36px 32px;max-width:480px;width:100%;box-shadow:0 16px 48px rgba(15,39,68,.22)}
+.fs-modal h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:#0f2744;margin-bottom:8px}
+.fs-modal .fs-sub{font-size:.84rem;color:#546e8a;margin-bottom:22px;line-height:1.7}
+.fs-modal .fs-sub a{color:#0e7c6e;font-weight:700;text-decoration:none}
+.fs-field{margin-bottom:16px}
+.fs-field label{display:block;font-size:.78rem;font-weight:700;color:#0f2744;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.fs-field input{width:100%;border:2px solid #d4dce8;border-radius:9px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:#0f2744;outline:none;transition:border .2s}
+.fs-field input:focus{border-color:#0e7c6e}
+.fs-field .fs-hint{font-size:.74rem;color:#546e8a;margin-top:5px;line-height:1.5}
+.fs-modal-btns{display:flex;gap:10px;margin-top:20px}
+.fs-modal-btns button{flex:1;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:background .2s}
+.fs-btn-cancel{background:#edf2f8;color:#0f2744}
+.fs-btn-cancel:hover{background:#d4dce8}
+.fs-btn-save{background:#0e7c6e;color:white}
+.fs-btn-save:hover{background:#0a6358}
+.fs-err{display:none;background:#fdeaea;border-radius:8px;padding:10px 14px;font-size:.83rem;font-weight:600;color:#8c1c1c;margin-top:10px}
+/* ── Configured bar ── */
+.fs-configured-bar{display:none;align-items:center;justify-content:space-between;background:#e6f9ee;border:2px solid #a8dfc0;border-radius:10px;padding:12px 16px;margin-bottom:16px}
+.fs-configured-bar span{font-size:.85rem;font-weight:700;color:#1a5c35}
+.fs-configured-bar button{background:none;border:2px solid #1a5c35;border-radius:7px;padding:4px 12px;font-size:.78rem;font-weight:700;color:#1a5c35;cursor:pointer;font-family:'DM Sans',sans-serif}
+.fs-configured-bar button:hover{background:#1a5c35;color:white}
+/* ── Setup prompt ── */
+.fs-setup-prompt{background:#fff3cd;border:2px solid #f5d78e;border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:.85rem;color:#7a5500;line-height:1.6}
+.fs-setup-prompt strong{display:block;margin-bottom:6px}
+.fs-setup-btn{width:100%;background:#0f2744;color:white;border:none;border-radius:10px;padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;margin-bottom:0;transition:background .2s}
+.fs-setup-btn:hover{background:#1a4a8a}
 </style>
 </head>
 <body>
@@ -205,10 +249,19 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
       <label>Teacher</label>
       <input type="text" id="teacher-name" placeholder="Teacher name">
     </div>
+    <div class="fs-configured-bar" id="fs-configured-bar">
+      <span>Submission endpoint configured</span>
+      <button onclick="openFsModal()">Edit</button>
+    </div>
+    <div class="fs-setup-prompt" id="fs-setup-prompt">
+      <strong>Teacher: configure submission endpoint before sharing this test</strong>
+      Click the button below to paste your Formspree URL. This takes 30 seconds and only needs to be done once on this device.
+    </div>
+    <button class="fs-setup-btn" id="fs-setup-btn-cover" onclick="openFsModal()" style="margin-bottom:16px">Configure Submission Endpoint</button>
     <div class="cover-notice">
       <strong>Before you begin - Mock Test</strong>
       This is a practice test. You will see whether each answer is correct or incorrect immediately after selecting it.
-      Read every question carefully. Complete both written response tasks in full sentences.
+      Read every question carefully. Complete all written response tasks in full sentences.
       The timer will count down from 60 minutes.
     </div>
     <button class="btn-primary" onclick="startTest()">Begin Mock Test</button>
@@ -261,6 +314,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
     </div>
   </div>
   <div class="results-body">
+    <div id="submit-banner" class="submit-banner" style="background:#edf2f8;color:#546e8a;border-color:#d4dce8">
+      Preparing submission...
+    </div>
     <div class="res-section" style="text-align:center;padding:20px">
       <p style="font-size:.9rem;color:var(--mid);line-height:1.6">
         MCQ score shown above (26 points). Written responses are scored separately by your teacher (6 points each, 18 points total).
@@ -282,8 +338,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
     </div>
     <div class="deliver-section">
       <h3>Results</h3>
-      <p class="sub">Your results are submitted to your teacher automatically when you click Submit Test. No further action is required from you.</p>
-      <div id="submit-status" style="padding:12px 16px;border-radius:8px;background:var(--light);font-size:.88rem;font-weight:600;margin-bottom:16px;min-height:42px;color:var(--mid)">Checking submission status...</div>
+      <p class="sub">Your results are submitted to your teacher automatically. No further action is required from you.</p>
       <div class="deliver-grid">
         <button class="del-btn card" onclick="downloadScoreCard()">Download Score Card</button>
         <button class="del-btn print" onclick="window.print()" style="grid-column:span 2">Print Full Results</button>
@@ -294,15 +349,54 @@ body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);
 
 <script>
 // ============================================================
-// TEACHER SETUP — paste your Formspree endpoint below (one-time, 2 minutes)
-// 1. Go to https://formspree.io and sign up for a FREE account
-// 2. Click "New Form", enter your email address, give it a name
-// 3. Copy the endpoint URL shown  (e.g. https://formspree.io/f/xpzgkjvw)
-// 4. Paste it as the value of FORMSPREE_ENDPOINT below, then save this file
-// From that point on, every student submission emails you automatically.
-// Free tier: 50 submissions per month (upgrade for more)
+// FORMSPREE — endpoint stored in browser (localStorage)
+// No file editing needed. Click "Configure" on the cover page.
 // ============================================================
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mdapkdel';
+const FS_LS_KEY = 'fs_endpoint_grade4_lw_mock';
+
+function getFsEndpoint(){{
+  return localStorage.getItem(FS_LS_KEY) || '';
+}}
+
+function openFsModal(){{
+  const current = getFsEndpoint();
+  document.getElementById('fs-url-input').value = current;
+  document.getElementById('fs-err').style.display = 'none';
+  document.getElementById('fs-modal-overlay').classList.add('show');
+}}
+
+function closeFsModal(){{
+  document.getElementById('fs-modal-overlay').classList.remove('show');
+}}
+
+function saveFsEndpoint(){{
+  const val = document.getElementById('fs-url-input').value.trim();
+  if(!val || !val.startsWith('https://formspree.io/f/')){
+    document.getElementById('fs-err').style.display = 'block';
+    return;
+  }
+  document.getElementById('fs-err').style.display = 'none';
+  localStorage.setItem(FS_LS_KEY, val);
+  applyFsUI(val);
+  closeFsModal();
+  const banner = document.getElementById('submit-banner');
+  if(banner){{ banner.textContent='Formspree configured. Results will be submitted automatically when the test ends.'; banner.style.background='#e6f9ee'; banner.style.color='#1a5c35'; banner.style.borderColor='#a8dfc0'; }}
+}}
+
+function applyFsUI(endpoint){{
+  const hasEndpoint = endpoint && endpoint.startsWith('https://formspree.io/f/');
+  const prompt = document.getElementById('fs-setup-prompt');
+  const bar    = document.getElementById('fs-configured-bar');
+  if(prompt) prompt.style.display = hasEndpoint ? 'none'  : 'block';
+  if(bar)    bar.style.display    = hasEndpoint ? 'flex'  : 'none';
+}}
+
+// Apply on page load
+(function(){{
+  const ep = getFsEndpoint();
+  document.addEventListener('DOMContentLoaded', () => applyFsUI(ep));
+  if(document.readyState !== 'loading') applyFsUI(ep);
+}})();
 
 // ============================================================
 // QUESTION DATA
@@ -526,6 +620,7 @@ let writtenAnswers = {};
 function startTest(){
   const name = document.getElementById('student-name').value.trim();
   if(!name){alert('Please enter your name before starting.');return;}
+  // Hide cover warning once test starts (it is for teacher reference only)
   document.getElementById('hdr-student').textContent = name;
   document.getElementById('cover').classList.remove('active');
   document.getElementById('test').classList.add('active');
@@ -720,146 +815,66 @@ function updateProgress(){
 // ============================================================
 
 // ============================================================
-// AUTO-SUBMISSION — fires automatically when test is submitted
+// AUTO-SUBMISSION via Formspree — fires automatically on submit
 // ============================================================
 async function sendToFormspree(scoreData){
-  const statusEl = document.getElementById('submit-status');
-  if(!FORMSPREE_ENDPOINT || FORMSPREE_ENDPOINT.includes('YOUR_FORM_ID')){
-    if(statusEl){ statusEl.textContent = 'Note: Formspree endpoint not configured. Results visible on screen only.'; statusEl.style.color='#7a5500'; }
+  const bannerEl = document.getElementById('submit-banner');
+  const endpoint = getFsEndpoint();
+
+  if(!endpoint){
+    if(bannerEl){
+      bannerEl.innerHTML = 'Formspree not configured. Ask your teacher to open the test and click <strong>Configure Submission Endpoint</strong>.';
+      bannerEl.style.background='#fff3cd'; bannerEl.style.color='#7a5500'; bannerEl.style.borderColor='#f5d78e';
+    }
     return;
   }
-  if(statusEl){ statusEl.textContent = 'Submitting results to teacher...'; statusEl.style.color='var(--mid)'; }
+
+  if(bannerEl){ bannerEl.textContent='Submitting results — please wait...'; bannerEl.style.background='#edf2f8'; bannerEl.style.color='#546e8a'; bannerEl.style.borderColor='#d4dce8'; }
+
+  function safe(str){ return (str||'No response submitted.').substring(0,3000); }
+
+  const payload = {
+    _subject:        scoreData._subject,
+    _replyto:        'noreply@exactpath.test',
+    test_type:       scoreData.test_type,
+    student_name:    scoreData.student_name,
+    teacher:         scoreData.teacher,
+    test_date:       scoreData.test_date,
+    mcq_score:       scoreData.mcq_score,
+    score_breakdown: scoreData.score_breakdown,
+    written_1_title: 'Written Response 1 (Organized Paragraph)',
+    written_1:       safe(scoreData.written_response_1),
+    written_2_title: 'Written Response 2 (Error Correction)',
+    written_2:       safe(scoreData.written_response_2),
+    written_3_title: 'Written Response 3 (Extended Writing)',
+    written_3:       safe(scoreData.written_response_3),
+  };
+
   try{
-    const resp = await fetch(FORMSPREE_ENDPOINT, {
+    const resp = await fetch(endpoint, {
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body: JSON.stringify(scoreData)
+      body: JSON.stringify(payload)
     });
+    const data = await resp.json();
     if(resp.ok){
-      if(statusEl){ statusEl.textContent = 'Results submitted to your teacher successfully.'; statusEl.style.color='var(--green)'; statusEl.style.fontWeight='700'; }
+      if(bannerEl){ bannerEl.textContent='Results submitted to your teacher successfully.'; bannerEl.style.background='#e6f9ee'; bannerEl.style.color='#1a5c35'; bannerEl.style.borderColor='#a8dfc0'; bannerEl.style.fontWeight='700'; }
     } else {
-      const err = await resp.json();
-      if(statusEl){ statusEl.textContent = 'Submission failed ('+resp.status+'). Please ask your teacher to check the Formspree setup.'; statusEl.style.color='var(--red)'; }
+      const msg = (data.errors||[]).map(e=>e.message).join(', ') || ('Status '+resp.status);
+      if(bannerEl){
+        bannerEl.innerHTML = 'Submission error: '+msg+
+          '<br><small style="font-weight:400;display:block;margin-top:6px">Make sure <strong>'+window.location.hostname+
+          '</strong> is listed in Formspree Settings > Allowed Domains.</small>';
+        bannerEl.style.background='#fdeaea'; bannerEl.style.color='#8c1c1c'; bannerEl.style.borderColor='#f5c6c6';
+      }
     }
-  } catch(e){
-    if(statusEl){ statusEl.textContent = 'Network error. Please ask your teacher to check the Formspree setup. Error: '+e.message; statusEl.style.color='var(--red)'; }
+  } catch(netErr){
+    if(bannerEl){
+      bannerEl.innerHTML = 'Network error: '+netErr.message+
+        '<br><small style="font-weight:400;display:block;margin-top:6px">Check your internet connection and try again.</small>';
+      bannerEl.style.background='#fdeaea'; bannerEl.style.color='#8c1c1c'; bannerEl.style.borderColor='#f5c6c6';
+    }
   }
-}
-function submitTest(){
-  clearInterval(timerInterval);
-  const allQ=SECTIONS.flatMap(s=>s.questions||[]);
-  let correct=0;
-  allQ.forEach(q=>{if(answers[q.id]===q.ans)correct++;});
-  const total=allQ.length;
-  const pct=Math.round(correct/total*100);
-
-  const domains={};
-  allQ.forEach(q=>{
-    if(!domains[q.domain])domains[q.domain]={correct:0,total:0};
-    domains[q.domain].total++;
-    if(answers[q.id]===q.ans)domains[q.domain].correct++;
-  });
-
-  document.getElementById('test').classList.remove('active');
-  document.getElementById('results').classList.add('active');
-
-  document.getElementById('student-display').textContent=
-    document.getElementById('student-name').value+
-    (document.getElementById('teacher-name').value?' - Teacher: '+document.getElementById('teacher-name').value:'');
-  document.getElementById('score-pct').textContent=pct+'%';
-  document.getElementById('score-raw').textContent=correct+' / '+total+' MCQ';
-
-  setTimeout(()=>{
-    const offset=427-(427*(pct/100));
-    document.getElementById('score-arc').style.strokeDashoffset=offset;
-  },300);
-
-  // Domain breakdown
-  const dWrap=document.getElementById('domain-breakdown');
-  dWrap.innerHTML='';
-  Object.entries(domains).forEach(([dom,data])=>{
-    const dpct=Math.round(data.correct/data.total*100);
-    dWrap.innerHTML+=`<div class="domain-row">
-      <div class="domain-label">${dom}</div>
-      <div class="domain-bar-wrap"><div class="domain-bar" style="width:0%" data-w="${dpct}%"></div></div>
-      <div class="domain-score">${data.correct}/${data.total}</div>
-    </div>`;
-  });
-  setTimeout(()=>{document.querySelectorAll('.domain-bar').forEach(b=>b.style.width=b.dataset.w);},500);
-
-  // MCQ review
-  const revWrap=document.getElementById('answer-review');
-  revWrap.innerHTML='';
-  let qn=0;
-  SECTIONS.forEach(sec=>{
-    if(sec.questions&&sec.questions.length){
-      const lbl=document.createElement('p');
-      lbl.style.cssText='font-weight:700;font-size:.82rem;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px';
-      lbl.textContent=sec.title;
-      revWrap.appendChild(lbl);
-      sec.questions.forEach(q=>{
-        qn++;
-        const ok=answers[q.id]===q.ans;
-        const r=document.createElement('div');
-        r.className='rev-item '+(ok?'ok':'no');
-        r.innerHTML=`<div class="rev-icon">${ok?'[Correct]':'[Wrong]'}</div>
-        <div>
-          <div class="rev-q">Q${qn}. ${q.text.split('\n')[0]}</div>
-          <div class="rev-ans">${ok?'Correct: '+q.opts[q.ans]:'Your answer: '+(answers[q.id]!==undefined?q.opts[answers[q.id]]:'Not answered')+' - Correct: '+q.opts[q.ans]}</div>
-        </div>`;
-        revWrap.appendChild(r);
-      });
-    }
-  });
-
-  // Written review
-  const wrWrap=document.getElementById('written-review');
-  wrWrap.innerHTML='';
-  WRITTEN_QS.forEach(wq=>{
-    const response=(writtenAnswers[wq.id]||'').trim();
-    const block=document.createElement('div');
-    block.className='wr-review-block';
-    block.innerHTML=`<h5>${wq.title} (${wq.points} points - Teacher scored)</h5>
-    <p style="font-size:.82rem;color:var(--mid);margin-bottom:6px">Your response:</p>
-    <div class="student-response">${response||'No response submitted.'}</div>
-    <div class="model-answer">
-      <strong>Model Answer (for teacher reference):</strong>
-      ${wq.modelAnswer.replace(/\n/g,'<br>')}
-    </div>
-    <table class="rubric-table" style="margin-top:14px">
-      <thead><tr><th>Criterion</th><th>Points</th><th>Description</th></tr></thead>
-      <tbody>
-        ${wq.rubric.map(r=>`<tr><td>${r.criterion}</td><td><span class="pts-pill">${r.pts}</span></td><td>${r.desc}</td></tr>`).join('')}
-      </tbody>
-    </table>`;
-    wrWrap.appendChild(block);
-  });
-
-  // Auto-submit to Formspree
-  const allQForSend = SECTIONS.flatMap(s=>s.questions||[]);
-  let correctForSend=0;
-  allQForSend.forEach(q=>{if(answers[q.id]===q.ans)correctForSend++;});
-  const domains_send={};
-  allQForSend.forEach(q=>{
-    if(!domains_send[q.domain])domains_send[q.domain]={correct:0,total:0};
-    domains_send[q.domain].total++;
-    if(answers[q.id]===q.ans)domains_send[q.domain].correct++;
-  });
-  let breakdown_txt='';
-  Object.entries(domains_send).forEach(([d,v])=>{ breakdown_txt+=d+': '+v.correct+'/'+v.total+'\n'; });
-  sendToFormspree({
-    _subject: '[Mock] Grade 4 Language and Writing - '+document.getElementById('student-name').value+' - '+correctForSend+'/'+allQForSend.length,
-    test_type: 'MOCK TEST',
-    student_name: document.getElementById('student-name').value,
-    teacher: document.getElementById('teacher-name').value||'Not specified',
-    test_date: new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}),
-    mcq_score: correctForSend+' / '+allQForSend.length+' ('+Math.round(correctForSend/allQForSend.length*100)+'%)',
-    score_breakdown: breakdown_txt,
-    written_response_1: writtenAnswers['wq1']||'No response submitted',
-    written_response_2: writtenAnswers['wq2']||'No response submitted',
-    written_response_3: writtenAnswers['wq3']||'No response submitted'
-  });
-  window.scrollTo(0,0);
 }
 
 // ============================================================
@@ -930,5 +945,33 @@ ${WRITTEN_QS.map(wq=>`<br>${wq.title}: __ / ${wq.points} pts`).join('')}<br><br>
   setTimeout(()=>URL.revokeObjectURL(url),5000);
 }
 </script>
+
+<!-- Formspree setup modal -->
+<div class="fs-modal-overlay" id="fs-modal-overlay">
+  <div class="fs-modal">
+    <h3>Configure Submission Endpoint</h3>
+    <p class="fs-sub">
+      Paste your <a href="https://formspree.io" target="_blank">Formspree</a> form URL below.
+      This is saved in your browser — you only need to do this once per device.<br><br>
+      Your Formspree URL looks like:<br>
+      <strong>https://formspree.io/f/xxxxxxxx</strong>
+    </p>
+    <div class="fs-field">
+      <label>Formspree Form URL</label>
+      <input type="url" id="fs-url-input" placeholder="https://formspree.io/f/xxxxxxxx" autocomplete="off" spellcheck="false">
+      <div class="fs-hint">
+        1. Go to <strong>formspree.io</strong> and sign in<br>
+        2. Open your form and copy the URL shown on the form page<br>
+        3. Paste it above and click Save
+      </div>
+    </div>
+    <div class="fs-err" id="fs-err">Please paste a valid Formspree URL (it must start with https://formspree.io/f/)</div>
+    <div class="fs-modal-btns">
+      <button class="fs-btn-cancel" onclick="closeFsModal()">Cancel</button>
+      <button class="fs-btn-save" onclick="saveFsEndpoint()">Save</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
