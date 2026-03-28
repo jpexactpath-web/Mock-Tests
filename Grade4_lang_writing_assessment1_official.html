@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 4 Language and Writing - Official Assessment 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0f2744;--blue:#1a4a8a;--teal:#0e7c6e;--gold:#e8a020;
+  --cream:#f4f6fa;--white:#ffffff;--green:#1e8a4a;--red:#c93535;
+  --mid:#546e8a;--light:#edf2f8;--border:#d4dce8;
+  --shadow-sm:0 2px 8px rgba(15,39,68,.08);
+  --shadow-md:0 6px 24px rgba(15,39,68,.13);
+  --shadow-lg:0 16px 48px rgba(15,39,68,.18);
+  --r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);line-height:1.6}
+.screen{display:none}
+.screen.active{display:block}
+
+/* COVER */
+#cover{min-height:100vh;background:linear-gradient(160deg,#062038 0%,#0f2744 45%,#0e3d35 100%);display:none;align-items:center;justify-content:center;padding:40px 20px}
+#cover.active{display:flex}
+.cover-card{background:var(--white);border-radius:24px;padding:52px 44px;max-width:580px;width:100%;box-shadow:var(--shadow-lg)}
+.official-seal{display:flex;align-items:center;gap:12px;background:var(--navy);border-radius:12px;padding:12px 18px;margin-bottom:28px}
+.seal-icon{font-size:1.3rem;color:white}
+.seal-text .line1{font-weight:700;font-size:.85rem;letter-spacing:.5px;color:white}
+.seal-text .line2{font-size:.72rem;color:rgba(255,255,255,.65);letter-spacing:.3px}
+.cover-card h1{font-family:'Playfair Display',serif;font-size:2.1rem;line-height:1.2;color:var(--navy);margin-bottom:6px}
+.cover-card .subtitle{color:var(--mid);font-size:.95rem;margin-bottom:28px}
+.info-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
+.info-item{background:var(--light);border-radius:12px;padding:12px 8px;text-align:center}
+.info-item .i-label{font-size:.68rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:.5px}
+.info-item .i-val{font-weight:700;color:var(--navy);font-size:.95rem;margin-top:4px}
+.field-group{margin-bottom:16px}
+.field-group label{display:block;font-weight:600;font-size:.88rem;margin-bottom:8px;color:var(--navy)}
+.field-group input{width:100%;border:2px solid var(--border);border-radius:10px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--navy);outline:none;transition:border .2s;background:var(--white)}
+.field-group input:focus{border-color:var(--teal)}
+.rules-box{background:#fff8f8;border:2px solid #f5c6c6;border-radius:10px;padding:16px;margin-bottom:24px}
+.rules-box h4{font-weight:700;font-size:.88rem;color:#8c1c1c;margin-bottom:10px}
+.rules-box ul{padding-left:20px;font-size:.85rem;color:#5a2020;line-height:2.2}
+.checkbox-row{display:flex;align-items:center;gap:10px;margin-bottom:20px;padding:12px 14px;background:var(--light);border-radius:10px;cursor:pointer}
+.checkbox-row input[type=checkbox]{width:18px;height:18px;accent-color:var(--teal);cursor:pointer;flex-shrink:0}
+.checkbox-row label{font-size:.88rem;font-weight:600;color:var(--navy);cursor:pointer}
+.btn-primary{width:100%;background:var(--navy);color:white;border:none;border-radius:12px;padding:16px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:1.05rem;cursor:pointer;transition:background .2s,transform .15s}
+.btn-primary:hover:not(:disabled){background:var(--blue);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+/* TEST SHELL */
+#test{min-height:100vh;display:none;flex-direction:column}
+#test.active{display:flex}
+.t-header{background:var(--navy);color:white;display:flex;align-items:center;justify-content:space-between;padding:0 28px;height:64px;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,.3)}
+.t-header-left h2{font-family:'Playfair Display',serif;font-size:1rem;line-height:1}
+.t-header-left .sub{font-size:.72rem;color:rgba(255,255,255,.6);margin-top:2px}
+.t-timer{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);border-radius:8px;padding:7px 16px;transition:background .3s}
+.t-timer .t-icon{font-size:.9rem;color:rgba(255,255,255,.8)}
+#timer-display{font-family:'Playfair Display',serif;font-size:1.4rem;letter-spacing:2px;color:white;min-width:62px;text-align:center}
+.t-timer.warn{background:var(--red);animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.7}}
+.t-right{display:flex;align-items:center;gap:14px}
+.q-counter{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600}
+.prog-bar{height:5px;background:rgba(255,255,255,.12)}
+.prog-fill{height:100%;background:var(--gold);transition:width .4s}
+.t-body{flex:1;max-width:860px;width:100%;margin:0 auto;padding:32px 20px 130px}
+
+/* SECTION HEADER */
+.sec-hd{background:var(--white);border-radius:var(--r);padding:22px 26px;margin-bottom:20px;box-shadow:var(--shadow-sm);border-left:5px solid var(--navy)}
+.sec-hd h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--navy)}
+.sec-hd .sec-ccss{font-size:.72rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-top:5px}
+.sec-hd .sec-desc{font-size:.85rem;color:var(--mid);margin-top:4px;line-height:1.5}
+
+/* QUESTION CARD */
+.q-card{background:var(--white);border-radius:var(--r);padding:24px;margin-bottom:14px;box-shadow:var(--shadow-sm);border:1px solid var(--border);transition:box-shadow .2s}
+.q-card:hover{box-shadow:var(--shadow-md)}
+.q-meta{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+.q-badge{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 10px;border-radius:20px}
+.q-badge.num{background:var(--navy);color:white}
+.q-badge.ccss{background:var(--light);color:var(--teal)}
+.q-badge.domain{background:#fef3e2;color:#a06000}
+.q-text{font-size:.97rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:16px}
+.q-text .block-text{background:var(--light);border-left:3px solid var(--navy);border-radius:0 8px 8px 0;padding:12px 16px;margin:10px 0;font-weight:400;font-size:.93rem;line-height:1.7;font-style:italic}
+.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:580px){.options{grid-template-columns:1fr}}
+.opt{display:flex;align-items:center;gap:12px;background:var(--light);border:2px solid transparent;border-radius:10px;padding:12px 16px;cursor:pointer;transition:all .15s;font-size:.92rem;font-weight:500;text-align:left}
+.opt:hover:not(.locked){border-color:var(--navy);background:#e8edf5}
+.opt.selected{border-color:var(--navy);background:#d6def0}
+.opt.correct{border-color:var(--green);background:#e6f9ee;cursor:default}
+.opt.wrong{border-color:var(--red);background:#fdeaea;cursor:default}
+.opt.locked{cursor:default}
+.opt-letter{width:28px;height:28px;border-radius:50%;background:var(--mid);color:white;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.opt.selected .opt-letter{background:var(--navy)}
+.opt.correct .opt-letter{background:var(--green)}
+.opt.wrong .opt-letter{background:var(--red)}
+
+/* WRITTEN RESPONSE */
+.wr-card{background:var(--white);border-radius:var(--r);padding:28px;margin-bottom:14px;box-shadow:var(--shadow-sm);border:1px solid var(--border)}
+.wr-card h4{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:6px}
+.wr-prompt{font-size:.93rem;color:var(--navy);line-height:1.7;margin-bottom:16px}
+.wr-prompt .passage-block{background:var(--light);border-left:4px solid var(--navy);border-radius:0 10px 10px 0;padding:16px 18px;margin:14px 0;font-style:italic;font-size:.91rem;line-height:1.8;color:#2a3a50}
+.wr-criteria{background:var(--light);border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:.84rem;color:var(--mid);line-height:1.7}
+.wr-criteria strong{color:var(--navy);display:block;margin-bottom:6px;font-size:.88rem}
+.wr-criteria ul{padding-left:20px}
+.wr-criteria li{margin-bottom:4px}
+.wr-textarea{width:100%;min-height:180px;border:2px solid var(--border);border-radius:10px;padding:14px 16px;font-family:'DM Sans',sans-serif;font-size:.95rem;line-height:1.7;resize:vertical;outline:none;transition:border .2s;color:var(--navy)}
+.wr-textarea:focus{border-color:var(--teal)}
+.wr-counter{font-size:.78rem;color:var(--mid);text-align:right;margin-top:6px}
+.wr-points{display:inline-block;background:var(--navy);color:white;font-size:.75rem;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:10px;vertical-align:middle}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,39,68,.6);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.show{display:flex}
+.modal-box{background:white;border-radius:18px;padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:var(--shadow-lg)}
+.modal-box h3{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:10px}
+.modal-box p{font-size:.9rem;color:var(--mid);margin-bottom:24px;line-height:1.6}
+.modal-btns{display:flex;gap:12px}
+.modal-btns button{flex:1;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer}
+.modal-cancel{background:var(--light);color:var(--navy)}
+.modal-confirm{background:var(--teal);color:white}
+
+/* NAV */
+.t-nav{position:fixed;bottom:0;left:0;right:0;background:var(--white);border-top:2px solid var(--border);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;z-index:190;box-shadow:0 -4px 20px rgba(15,39,68,.1)}
+.nav-info{font-size:.82rem;color:var(--mid);font-weight:600}
+.btn-nav{border:none;border-radius:10px;padding:11px 26px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.95rem;cursor:pointer;transition:all .15s}
+.btn-prev{background:var(--light);color:var(--navy)}
+.btn-prev:hover{background:var(--border)}
+.btn-next{background:var(--navy);color:white}
+.btn-next:hover{background:var(--blue)}
+.btn-submit{background:var(--teal);color:white}
+.btn-submit:hover{background:var(--green)}
+.btn-nav:disabled{opacity:.4;cursor:not-allowed}
+.sec-dots{display:flex;gap:6px}
+.sec-dot{width:10px;height:10px;border-radius:50%;background:var(--border);cursor:pointer;transition:background .2s}
+.sec-dot.done{background:var(--navy)}
+.sec-dot.active{background:var(--gold);transform:scale(1.3)}
+
+/* RESULTS */
+#results{min-height:100vh;background:var(--cream);display:none;flex-direction:column}
+#results.active{display:flex}
+.results-header{background:linear-gradient(135deg,#062038 0%,#0f2744 100%);padding:40px 24px;text-align:center;color:white}
+.off-tag{background:var(--gold);color:var(--navy);font-weight:700;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;padding:4px 14px;border-radius:20px;display:inline-block;margin-bottom:16px}
+.results-header h1{font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:8px}
+.score-circle-wrap{margin:28px auto 0;width:160px;height:160px;position:relative}
+.score-circle-wrap svg{transform:rotate(-90deg)}
+.score-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.score-text .big{font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:white}
+.score-text .small{font-size:.8rem;color:rgba(255,255,255,.7);font-weight:600}
+.results-body{max-width:700px;margin:0 auto;padding:32px 20px 60px;width:100%}
+.res-section{background:var(--white);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--shadow-sm)}
+.res-section h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:16px}
+.grade-pill{display:inline-block;padding:6px 18px;border-radius:20px;font-weight:700;font-size:.9rem;margin-bottom:10px}
+.grade-A{background:#e6f9ee;color:#1a5c35}.grade-B{background:#e8f3ff;color:#1a4a8a}
+.grade-C{background:#fff8ec;color:#7a5500}.grade-D{background:#fdeaea;color:#8c1c1c}
+.domain-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.domain-label{font-size:.85rem;font-weight:600;color:var(--navy);flex:0 0 200px}
+.domain-bar-wrap{flex:1;height:8px;background:var(--light);border-radius:4px;overflow:hidden}
+.domain-bar{height:100%;border-radius:4px;background:var(--navy);transition:width 1s ease}
+.domain-score{font-size:.85rem;font-weight:700;color:var(--navy);flex:0 0 50px;text-align:right}
+.rev-item{display:flex;gap:12px;align-items:flex-start;padding:10px 14px;border-radius:8px;margin-bottom:6px;font-size:.85rem}
+.rev-item.ok{background:#e6f9ee}
+.rev-item.no{background:#fdeaea}
+.rev-icon{font-size:.85rem;flex-shrink:0;margin-top:2px;font-weight:700}
+.rev-q{font-weight:600;color:var(--navy);margin-bottom:2px}
+.rev-ans{color:var(--mid);font-size:.8rem}
+.teacher-score-block{background:var(--light);border-radius:12px;padding:18px;margin-bottom:12px}
+.teacher-score-block h5{font-weight:700;font-size:.9rem;color:var(--navy);margin-bottom:10px}
+.student-response-box{background:white;border-radius:8px;padding:12px 14px;font-size:.87rem;line-height:1.7;color:#2a3a50;margin-bottom:12px;border:1px solid var(--border);min-height:40px;white-space:pre-wrap}
+.rubric-table{width:100%;border-collapse:collapse;font-size:.87rem}
+.rubric-table th{background:var(--navy);color:white;padding:9px 12px;text-align:left;font-weight:700;font-size:.78rem}
+.rubric-table th:first-child{border-radius:8px 0 0 0}
+.rubric-table th:last-child{border-radius:0 8px 0 0}
+.rubric-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;font-size:.85rem}
+.rubric-table tr:nth-child(even) td{border-bottom:1px solid var(--border)}
+.rubric-table tr:last-child td{border-bottom:none}
+.score-input{width:58px;border:2px solid var(--border);border-radius:6px;padding:5px 8px;font-family:'DM Sans',sans-serif;font-size:.9rem;text-align:center;outline:none;transition:border .2s}
+.score-input:focus{border-color:var(--teal)}
+.pts-pill{display:inline-block;background:var(--navy);color:white;border-radius:6px;padding:2px 8px;font-weight:700;font-size:.78rem}
+.combined-box{text-align:center;padding:8px 0}
+.combined-box .c-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--navy)}
+.deliver-section{background:var(--white);border-radius:var(--r);padding:24px;margin-bottom:16px;box-shadow:var(--shadow-sm);border:2px solid var(--navy)}
+.deliver-section h3{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:6px}
+.deliver-section .sub{font-size:.85rem;color:var(--mid);margin-bottom:18px;line-height:1.6}
+.deliver-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:560px){.deliver-grid{grid-template-columns:1fr}}
+.del-btn{display:flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:12px;padding:13px 16px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;text-align:center}
+.del-btn.mail{background:var(--teal);color:white}
+.del-btn.mail:hover{background:#0a6358;transform:translateY(-1px)}
+.del-btn.card{background:var(--navy);color:white}
+.del-btn.card:hover{background:var(--blue);transform:translateY(-1px)}
+.del-btn.print{background:var(--light);color:var(--navy);border:2px solid var(--border)}
+.del-btn.print:hover{background:var(--border)}
+.teacher-email-field{margin-bottom:14px}
+.teacher-email-field label{display:block;font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:6px}
+.teacher-email-field input{width:100%;border:2px solid var(--border);border-radius:8px;padding:10px 14px;font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border .2s}
+.teacher-email-field input:focus{border-color:var(--teal)}
+@media print{
+  .t-nav,.t-header,.prog-bar,.deliver-section,.modal-overlay{display:none!important}
+  body{background:white}
+  .q-card,.wr-card,.res-section,.sec-hd{box-shadow:none;border:1px solid #ccc;break-inside:avoid}
+}
+/* ── Submission banner ── */
+.submit-banner{
+  border-radius:12px;padding:16px 20px;margin-bottom:20px;
+  font-size:.9rem;line-height:1.6;border:2px solid;
+  transition:all .3s;
+}
+/* ── Cover warning ── */
+.endpoint-warning{
+  display:none;background:#fff3cd;border:2px solid #f5d78e;
+  border-radius:10px;padding:14px 16px;margin-bottom:20px;
+  font-size:.84rem;color:#7a5500;line-height:1.6;
+}
+.endpoint-warning strong{display:block;margin-bottom:4px}
+.endpoint-warning code{background:#fdecc8;padding:1px 6px;border-radius:4px;font-family:monospace;font-size:.82rem}
+
+/* ── Formspree setup modal ── */
+.fs-modal-overlay{position:fixed;inset:0;background:rgba(15,39,68,.65);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.fs-modal-overlay.show{display:flex}
+.fs-modal{background:#fff;border-radius:20px;padding:36px 32px;max-width:480px;width:100%;box-shadow:0 16px 48px rgba(15,39,68,.22)}
+.fs-modal h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:#0f2744;margin-bottom:8px}
+.fs-modal .fs-sub{font-size:.84rem;color:#546e8a;margin-bottom:22px;line-height:1.7}
+.fs-modal .fs-sub a{color:#0e7c6e;font-weight:700;text-decoration:none}
+.fs-field{margin-bottom:16px}
+.fs-field label{display:block;font-size:.78rem;font-weight:700;color:#0f2744;text-transform:uppercase;letter-spacing:.4px;margin-bottom:6px}
+.fs-field input{width:100%;border:2px solid #d4dce8;border-radius:9px;padding:12px 14px;font-family:'DM Sans',sans-serif;font-size:.95rem;color:#0f2744;outline:none;transition:border .2s}
+.fs-field input:focus{border-color:#0e7c6e}
+.fs-field .fs-hint{font-size:.74rem;color:#546e8a;margin-top:5px;line-height:1.5}
+.fs-modal-btns{display:flex;gap:10px;margin-top:20px}
+.fs-modal-btns button{flex:1;border:none;border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;transition:background .2s}
+.fs-btn-cancel{background:#edf2f8;color:#0f2744}
+.fs-btn-cancel:hover{background:#d4dce8}
+.fs-btn-save{background:#0e7c6e;color:white}
+.fs-btn-save:hover{background:#0a6358}
+.fs-err{display:none;background:#fdeaea;border-radius:8px;padding:10px 14px;font-size:.83rem;font-weight:600;color:#8c1c1c;margin-top:10px}
+/* ── Configured bar ── */
+.fs-configured-bar{display:none;align-items:center;justify-content:space-between;background:#e6f9ee;border:2px solid #a8dfc0;border-radius:10px;padding:12px 16px;margin-bottom:16px}
+.fs-configured-bar span{font-size:.85rem;font-weight:700;color:#1a5c35}
+.fs-configured-bar button{background:none;border:2px solid #1a5c35;border-radius:7px;padding:4px 12px;font-size:.78rem;font-weight:700;color:#1a5c35;cursor:pointer;font-family:'DM Sans',sans-serif}
+.fs-configured-bar button:hover{background:#1a5c35;color:white}
+/* ── Setup prompt ── */
+.fs-setup-prompt{background:#fff3cd;border:2px solid #f5d78e;border-radius:10px;padding:14px 16px;margin-bottom:16px;font-size:.85rem;color:#7a5500;line-height:1.6}
+.fs-setup-prompt strong{display:block;margin-bottom:6px}
+.fs-setup-btn{width:100%;background:#0f2744;color:white;border:none;border-radius:10px;padding:13px;font-family:'DM Sans',sans-serif;font-weight:700;font-size:.92rem;cursor:pointer;margin-bottom:0;transition:background .2s}
+.fs-setup-btn:hover{background:#1a4a8a}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="cover" class="screen active">
+  <div class="cover-card">
+    <div class="official-seal">
+      <div class="seal-icon">&#9632;</div>
+      <div class="seal-text">
+        <div class="line1">Official Assessment - Grade 4</div>
+        <div class="line2">Language Arts - Exact Path Program</div>
+      </div>
+    </div>
+    <h1>Assessment 1<br>Language and Writing</h1>
+    <p class="subtitle">Grade 4 - Weeks 1-11 - Language Conventions and Writing Skills - Official Test</p>
+    <div class="info-strip">
+      <div class="info-item"><div class="i-label">Duration</div><div class="i-val">60 min</div></div>
+      <div class="info-item"><div class="i-label">MCQ</div><div class="i-val">26 questions</div></div>
+      <div class="info-item"><div class="i-label">Written</div><div class="i-val">3 tasks</div></div>
+      <div class="info-item"><div class="i-label">Total</div><div class="i-val">44 pts</div></div>
+    </div>
+    <div class="field-group">
+      <label>Student Full Name</label>
+      <input type="text" id="student-name" placeholder="Type your full name">
+    </div>
+    <div class="field-group">
+      <label>Date (auto-filled)</label>
+      <input type="date" id="test-date" readonly style="background:#f4f6fa;cursor:default;color:var(--mid)">
+    </div>
+    <div class="field-group">
+      <label>Teacher</label>
+      <input type="text" id="teacher-name" placeholder="Teacher name">
+    </div>
+    <div class="fs-configured-bar" id="fs-configured-bar">
+      <span>Submission endpoint configured</span>
+      <button onclick="openFsModal()">Edit</button>
+    </div>
+    <div class="fs-setup-prompt" id="fs-setup-prompt">
+      <strong>Teacher: configure submission endpoint before sharing this test</strong>
+      Click the button below to paste your Formspree URL. This takes 30 seconds and only needs to be done once on this device.
+    </div>
+    <button class="fs-setup-btn" id="fs-setup-btn-cover" onclick="openFsModal()" style="margin-bottom:16px">Configure Submission Endpoint</button>
+    <div class="rules-box">
+      <h4>Official Test Rules</h4>
+      <ul>
+        <li>This is an official assessment. No answer feedback will be given during the test.</li>
+        <li>Read every question carefully before selecting your answer.</li>
+        <li>You may navigate between sections at any time before submitting.</li>
+        <li>The test will submit automatically when the 60-minute timer reaches zero.</li>
+        <li>Write your responses in full sentences using correct grammar and punctuation.</li>
+        <li>Do not refresh the page or close the browser during the test.</li>
+      </ul>
+    </div>
+    <div class="checkbox-row">
+      <input type="checkbox" id="agree-check" onchange="checkAgreement()">
+      <label for="agree-check">I have read the rules and I am ready to begin the official test.</label>
+    </div>
+    <button class="btn-primary" id="btn-start" onclick="startTest()" disabled>Begin Official Test</button>
+  </div>
+</div>
+
+<!-- TEST -->
+<div id="test" class="screen">
+  <header class="t-header">
+    <div class="t-header-left">
+      <h2>Grade 4 - Official Assessment 1 - Language and Writing</h2>
+      <div class="sub" id="hdr-student"></div>
+    </div>
+    <div class="t-right">
+      <span class="q-counter" id="q-counter">Section 1 of 3</span>
+      <div class="t-timer" id="timer-box">
+        <span class="t-icon">&#9201;</span>
+        <span id="timer-display">60:00</span>
+      </div>
+    </div>
+  </header>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+  <div class="t-body" id="t-body"></div>
+  <nav class="t-nav">
+    <button class="btn-nav btn-prev" id="btn-prev" onclick="prevSec()">Previous</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+      <div class="sec-dots" id="sec-dots"></div>
+      <span class="nav-info" id="nav-info">Section 1 of 3</span>
+    </div>
+    <button class="btn-nav btn-next" id="btn-next" onclick="trySubmit()">Next</button>
+  </nav>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="modal-overlay" id="confirm-modal">
+  <div class="modal-box">
+    <h3>Submit Assessment?</h3>
+    <p id="modal-msg">Are you sure you want to submit? Ensure you have answered all questions and completed both written responses.</p>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal()">Go Back</button>
+      <button class="modal-confirm" onclick="submitTest()">Submit Now</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="results" class="screen">
+  <div class="results-header">
+    <div class="off-tag">Official Test Results</div>
+    <h1>Assessment 1 - Grade 4</h1>
+    <div id="res-meta1" style="font-size:.9rem;opacity:.8;margin-bottom:2px"></div>
+    <div id="res-meta2" style="font-size:.85rem;opacity:.7;margin-bottom:16px"></div>
+    <div class="score-circle-wrap">
+      <svg width="160" height="160" viewBox="0 0 160 160">
+        <circle cx="80" cy="80" r="68" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="12"/>
+        <circle id="score-arc" cx="80" cy="80" r="68" fill="none" stroke="#e8a020" stroke-width="12"
+          stroke-dasharray="427" stroke-dashoffset="427" stroke-linecap="round"/>
+      </svg>
+      <div class="score-text">
+        <div class="big" id="score-pct">-</div>
+        <div class="small" id="score-raw">- / 26</div>
+      </div>
+    </div>
+  </div>
+  <div class="results-body">
+    <div id="submit-banner" class="submit-banner" style="background:#edf2f8;color:#546e8a;border-color:#d4dce8">
+      Preparing submission...
+    </div>
+    <div class="res-section" style="text-align:center">
+      <div id="grade-pill-wrap"></div>
+      <p id="perf-msg" style="font-size:.92rem;color:var(--mid);line-height:1.6;margin-top:6px"></p>
+    </div>
+    <div class="res-section">
+      <h3>Score by Standard</h3>
+      <div id="domain-breakdown"></div>
+    </div>
+    <div class="res-section">
+      <h3>Question Review</h3>
+      <p style="font-size:.82rem;color:var(--mid);margin-bottom:14px">Correct answers are shown below. Review missed questions with your teacher.</p>
+      <div id="answer-review"></div>
+    </div>
+    <div class="res-section">
+      <h3>Written Response Scoring</h3>
+      <p style="font-size:.87rem;color:var(--mid);margin-bottom:16px;line-height:1.6">Read each student response and enter scores in the fields below. Total written score: 12 points.</p>
+      <div id="written-scoring"></div>
+      <div style="text-align:right;margin-top:12px">
+        <p style="font-size:.85rem;color:var(--mid);margin-bottom:4px">Written Total</p>
+        <div style="font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--navy)"><span id="written-total">0</span> / 18</div>
+      </div>
+    </div>
+    <div class="res-section">
+      <h3>Combined Score</h3>
+      <p style="font-size:.85rem;color:var(--mid);margin-bottom:12px">MCQ (26 pts) + Written (18 pts) = 44 pts total</p>
+      <div class="combined-box">
+        <div class="c-num" id="combined-display">-- / 44</div>
+      </div>
+      <div style="margin-top:16px">
+        <label style="display:block;font-weight:700;font-size:.85rem;margin-bottom:8px;color:var(--navy)">Teacher Comments</label>
+        <textarea style="width:100%;min-height:90px;border:2px solid var(--border);border-radius:10px;padding:12px;font-family:'DM Sans',sans-serif;font-size:.9rem;resize:vertical;outline:none" placeholder="Overall feedback for the student..." onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--border)'"></textarea>
+      </div>
+    </div>
+    <div class="deliver-section">
+      <h3>Results</h3>
+      <p class="sub">Results are submitted to the teacher automatically when the student clicks Submit Test. No action is required from the student.</p>
+      <div class="deliver-grid">
+        <button class="del-btn card" onclick="downloadScoreCard()">Download Score Card</button>
+        <button class="del-btn print" onclick="window.print()" style="grid-column:span 2">Print Full Results</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// FORMSPREE — endpoint stored in browser (localStorage)
+// No file editing needed. Click "Configure" on the cover page.
+// ============================================================
+const FS_LS_KEY = 'fs_endpoint_grade4_lw_official';
+
+function getFsEndpoint(){{
+  return localStorage.getItem(FS_LS_KEY) || '';
+}}
+
+function openFsModal(){{
+  const current = getFsEndpoint();
+  document.getElementById('fs-url-input').value = current;
+  document.getElementById('fs-err').style.display = 'none';
+  document.getElementById('fs-modal-overlay').classList.add('show');
+}}
+
+function closeFsModal(){{
+  document.getElementById('fs-modal-overlay').classList.remove('show');
+}}
+
+function saveFsEndpoint(){{
+  const val = document.getElementById('fs-url-input').value.trim();
+  if(!val || !val.startsWith('https://formspree.io/f/')){
+    document.getElementById('fs-err').style.display = 'block';
+    return;
+  }
+  document.getElementById('fs-err').style.display = 'none';
+  localStorage.setItem(FS_LS_KEY, val);
+  applyFsUI(val);
+  closeFsModal();
+  const banner = document.getElementById('submit-banner');
+  if(banner){{ banner.textContent='Formspree configured. Results will be submitted automatically when the test ends.'; banner.style.background='#e6f9ee'; banner.style.color='#1a5c35'; banner.style.borderColor='#a8dfc0'; }}
+}}
+
+function applyFsUI(endpoint){{
+  const hasEndpoint = endpoint && endpoint.startsWith('https://formspree.io/f/');
+  const prompt = document.getElementById('fs-setup-prompt');
+  const bar    = document.getElementById('fs-configured-bar');
+  if(prompt) prompt.style.display = hasEndpoint ? 'none'  : 'block';
+  if(bar)    bar.style.display    = hasEndpoint ? 'flex'  : 'none';
+}}
+
+// Apply on page load
+(function(){{
+  const ep = getFsEndpoint();
+  document.addEventListener('DOMContentLoaded', () => applyFsUI(ep));
+  if(document.readyState !== 'loading') applyFsUI(ep);
+}})();
+
+// ============================================================
+// QUESTION DATA
+// ============================================================
+const SECTIONS = [
+  {
+    id:'s1',
+    title:'Section 1: Language Conventions',
+    ccss:'L.4.1 - L.4.1b - L.4.1c - L.4.1d - L.4.1f - L.4.2a - L.4.2b - L.4.2c',
+    desc:'Grammar, punctuation, and language conventions covered in Weeks 1-11',
+    questions:[
+      {id:'q1',num:1,
+       text:'Which sentence uses the PRESENT tense correctly?',
+       opts:['The river flows swiftly through the valley.','The river flowed swiftly through the valley yesterday.','The river is flow swiftly through the valley.','The river will flowing swiftly through the valley.'],
+       ans:0,ccss:'L.4.1',domain:'Verb Tenses',
+       feedback:'"Flows" is the simple present tense used to describe a regular or ongoing state.'},
+      {id:'q2',num:2,
+       text:'Which sentence correctly uses the PAST PERFECT tense?',
+       opts:['She will have finished her project by tomorrow.','She has finished her project already.','She had finished her project before the bell rang.','She finishes her project every week.'],
+       ans:2,ccss:'L.4.1',domain:'Verb Tenses',
+       feedback:'The past perfect "had finished" describes an action completed before another past event. "Before the bell rang" confirms the sequence.'},
+      {id:'q3',num:3,
+       text:'Which sentence uses the FUTURE PROGRESSIVE correctly?',
+       opts:['The choir will be performing at the assembly next week.','The choir performed at the assembly last week.','The choir is performing at the assembly right now.','The choir performed at the assembly every year.'],
+       ans:0,ccss:'L.4.1b',domain:'Progressive Tenses',
+       feedback:'The future progressive "will be performing" describes an action that will be in progress at a future point in time.'},
+      {id:'q4',num:4,
+       text:'Which sentence uses the PAST PROGRESSIVE tense correctly?',
+       opts:['The mechanics fixed the car engine all day long.','The mechanics were fixing the car engine when we arrived.','The mechanics will fix the car engine tomorrow.','The mechanics has fixed the car engine already.'],
+       ans:1,ccss:'L.4.1b',domain:'Progressive Tenses',
+       feedback:'The past progressive "were fixing" describes an action that was in progress when another event (we arrived) occurred.'},
+      {id:'q5',num:5,
+       text:'Which modal auxiliary best expresses ABILITY in this sentence?\n"With enough practice, she ___ speak fluently in six months."',
+       opts:['must','should','could','might'],
+       ans:2,ccss:'L.4.1c',domain:'Modal Auxiliaries',
+       feedback:'"Could" expresses ability or potential. In this context, it refers to a skill she will be capable of developing.'},
+      {id:'q6',num:6,
+       text:'Which sentence uses a modal auxiliary to express OBLIGATION?',
+       opts:['He might visit his grandparents this weekend.','She should submit her report before the deadline.','They could try a different approach to the problem.','We may receive our results by Friday.'],
+       ans:1,ccss:'L.4.1c',domain:'Modal Auxiliaries',
+       feedback:'"Should" expresses duty or strong recommendation, making it the closest to obligation. "Might" and "may" express possibility; "could" expresses ability.'},
+      {id:'q7',num:7,
+       text:'Which phrase lists adjectives in the CORRECT order?',
+       opts:['a round large ancient coin','a large ancient round coin','a large round ancient coin','an ancient large round coin'],
+       ans:2,ccss:'L.4.1d',domain:'Adjective Order',
+       feedback:'The correct adjective order is size (large) - shape (round) - age (ancient). The standard sequence: opinion - size - age - shape - colour - origin - material.'},
+      {id:'q8',num:8,
+       text:'Which sentence uses adjectives in the CORRECT order?',
+       opts:['He drove an Italian red old sports car.','He drove an old red Italian sports car.','He drove a red old Italian sports car.','He drove an old Italian red sports car.'],
+       ans:1,ccss:'L.4.1d',domain:'Adjective Order',
+       feedback:'The correct order is age (old) - colour (red) - origin (Italian). Following the standard pattern: age before colour before origin.'},
+      {id:'q9',num:9,
+       text:'Which sentence is capitalized CORRECTLY?',
+       opts:['The Amazon river flows through brazil and several other countries.','The amazon River flows through Brazil and several other countries.','The Amazon River flows through Brazil and several other countries.','the Amazon River flows through Brazil and Several other Countries.'],
+       ans:2,ccss:'L.4.2a',domain:'Capitalization',
+       feedback:'Both parts of the proper noun "Amazon River" are capitalized, as is the country name "Brazil." Common words like "several" and "other" are not capitalized mid-sentence.'},
+      {id:'q10',num:10,
+       text:'Which sentence contains a capitalization ERROR?',
+       opts:['We celebrated Thanksgiving at my aunt\'s house in Boston.','The science fair will be held on the third friday of October.','President Lincoln signed the Emancipation Proclamation in 1863.','My cousin attends Riverside Middle School in Portland.'],
+       ans:1,ccss:'L.4.2a',domain:'Capitalization',
+       feedback:'"Friday" is a day of the week and must always be capitalized. Days of the week and months are proper nouns.'},
+      {id:'q11',num:11,
+       text:'Which sentence uses quotation marks CORRECTLY?',
+       opts:['"Please turn to page forty-five, the teacher instructed."','The teacher instructed, "please turn to page forty-five."','The teacher instructed, "Please turn to page forty-five."','The teacher "instructed," Please turn to page forty-five.'],
+       ans:2,ccss:'L.4.2b',domain:'Punctuation - Dialogue',
+       feedback:'A comma separates the dialogue tag from the quotation. The first word inside the quotation marks is capitalized.'},
+      {id:'q12',num:12,
+       text:'Which sentence punctuates the dialogue CORRECTLY?',
+       opts:['"We are going to be late" Maya whispered urgently.','"We are going to be late," Maya whispered urgently.','"We are going to be late", Maya whispered urgently.','"We are going to be late." Maya whispered urgently.'],
+       ans:1,ccss:'L.4.2b',domain:'Punctuation - Dialogue',
+       feedback:'The comma goes inside the closing quotation mark when the dialogue tag follows. "Maya whispered urgently" is the tag, not a new sentence.'},
+      {id:'q13',num:13,
+       text:'Which of the following is a complete sentence, NOT a fragment?',
+       opts:['After hiking through the dense rainforest for several hours.','The ancient ruins discovered by the archaeologists last spring.','Despite the heavy rain and the flooded roads.','The expedition team finally reached the summit at noon.'],
+       ans:3,ccss:'L.4.1f',domain:'Fragments and Run-Ons',
+       feedback:'Option D has a subject (expedition team) and a predicate (finally reached the summit at noon). Options A, B, and C lack a complete predicate and cannot stand alone.'},
+      {id:'q14',num:14,
+       text:'Which option CORRECTLY fixes this run-on sentence?\n"The concert was sold out we could not get tickets we decided to watch it online"',
+       opts:['The concert was sold out, we could not get tickets, we decided to watch it online.','The concert was sold out. We could not get tickets, so we decided to watch it online.','The concert was sold out we could not get tickets, so we decided to watch it online.','The concert was sold out, we could not get tickets. So we decided to watch it online.'],
+       ans:1,ccss:'L.4.1f',domain:'Fragments and Run-Ons',
+       feedback:'Option B correctly separates the first independent clause with a period, then joins the remaining two with a comma and a coordinating conjunction.'},
+      {id:'q15',num:15,
+       text:'Which sentence correctly uses a comma and a coordinating conjunction to join two independent clauses?',
+       opts:['The experiment failed and the scientists, tried again.','The experiment failed, and the scientists tried again.','The experiment failed, and, the scientists tried again.','The experiment failed and, the scientists tried again.'],
+       ans:1,ccss:'L.4.2c',domain:'Conjunctions',
+       feedback:'The comma is placed before the coordinating conjunction "and" when joining two independent clauses. Only one comma is used.'},
+      {id:'q16',num:16,
+       text:'Which coordinating conjunction best completes this sentence?\n"He trained for months, ___ he won first place in the competition."',
+       opts:['but','for','yet','so'],
+       ans:3,ccss:'L.4.2c',domain:'Conjunctions',
+       feedback:'"So" shows a result or consequence. He trained hard; as a result, he won. "But" and "yet" would introduce contrast, which does not fit the meaning here.'},
+    ]
+  },
+  {
+    id:'s2',
+    title:'Section 2: Writing Skills',
+    ccss:'W.4.4 - W.4.1a - W.4.2a - W.4.1b - W.4.2b',
+    desc:'Task, purpose, audience, introductions, conclusions, and organizing ideas - Weeks 1 and 8-11',
+    questions:[
+      {id:'q17',num:17,
+       text:'A student is writing a guide explaining how to care for a pet hamster. What is the primary PURPOSE of this writing?',
+       opts:['To entertain readers with a funny story about hamsters','To persuade readers to adopt a hamster as a pet','To inform readers about the steps needed to care for a hamster','To express personal feelings about having a hamster'],
+       ans:2,ccss:'W.4.4',domain:'Task, Purpose, and Audience',
+       feedback:'A how-to guide has an informative purpose. It aims to teach the reader how to do something by providing clear, organized steps or instructions.'},
+      {id:'q18',num:18,
+       text:'A student is writing a speech about staying safe online for an audience of younger students. Which choice BEST reflects awareness of this audience?',
+       opts:['Using complex statistics and technical terminology about cybersecurity','Referencing news articles written for adult professionals','Using simple language and relatable examples such as being careful about who you chat with in games','Discussing legal consequences of online misconduct in detail'],
+       ans:2,ccss:'W.4.4',domain:'Task, Purpose, and Audience',
+       feedback:'Writing for a younger audience requires simpler vocabulary and examples they can relate to from their own experience, such as online gaming.'},
+      {id:'q19',num:19,
+       text:'Which sentence makes the STRONGEST opening for a persuasive essay about reducing plastic waste?',
+       opts:['This essay is going to be about plastic waste and why it is bad.','Plastic waste is a problem that affects many countries and oceans around the world.','Every year, eight million metric tons of plastic enter the world\'s oceans, threatening marine life and entering the food chain that feeds billions of people.','I think plastic waste is a serious problem and in this essay I will explain my reasons.'],
+       ans:2,ccss:'W.4.1a',domain:'Introducing Topics',
+       feedback:'A strong persuasive introduction uses precise, compelling evidence to engage the reader immediately. Option C uses a striking statistic that makes the scale of the problem impossible to ignore.'},
+      {id:'q20',num:20,
+       text:'Which sentence BEST introduces an informational paragraph about the water cycle?',
+       opts:['The water cycle is something I learned about in science class last year.','There are many stages in the water cycle and all of them are important.','The water cycle is the continuous movement of water through evaporation, condensation, and precipitation, replenishing Earth\'s freshwater supply.','Water is very important and without it, living things would not survive on Earth.'],
+       ans:2,ccss:'W.4.2a',domain:'Introducing Topics',
+       feedback:'An effective informational introduction defines the topic clearly and precisely. Option C gives the reader a complete, accurate overview in a single sentence.'},
+      {id:'q21',num:21,
+       text:'Which sentence provides the MOST effective conclusion for an essay about the benefits of team sports?',
+       opts:['So those are the reasons why team sports are beneficial for students.','In conclusion, I think team sports are a good thing for everyone.','Team sports not only build physical fitness but also develop the collaboration and resilience that students will rely on far beyond the playing field.','Team sports are very good and everyone should play them if they can.'],
+       ans:2,ccss:'W.4.1a',domain:'Closing Topics',
+       feedback:'A strong conclusion synthesizes the key ideas without simply repeating them. Option C connects the benefits discussed (fitness, collaboration, resilience) to a broader purpose.'},
+      {id:'q22',num:22,
+       text:'A student is writing an opinion piece about whether zoos are good for animals. Which introduction is WEAKEST?',
+       opts:['While zoos claim to protect endangered species, critics argue they restrict natural behavior and create psychological harm in highly intelligent animals.','Zoos house thousands of animal species and attract millions of visitors worldwide.','In this essay I will write about zoos and whether they are good or bad for animals.','For centuries, zoos have sparked a debate: are they essential conservation centers or outdated institutions that prioritize human entertainment over animal welfare?'],
+       ans:2,ccss:'W.4.1a',domain:'Introducing Topics',
+       feedback:'Option C is the weakest because it simply announces what the essay will do rather than engaging the reader with the topic itself. Strong introductions never begin by telling the reader what the essay "will write about."'},
+      {id:'q23',num:23,
+       text:'A student is writing to persuade the school board to add a school garden. Which detail BEST supports this argument?',
+       opts:['Many famous chefs grow their own herbs and vegetables at home.','Gardening has been practiced by humans for thousands of years in all cultures.','Students who participate in school gardens show increased science scores and healthier eating habits, according to multiple studies.','Vegetables such as tomatoes, lettuce, and carrots can be grown in small spaces.'],
+       ans:2,ccss:'W.4.1b',domain:'Supporting Details',
+       feedback:'The strongest detail is directly connected to the argument (school gardens improve student outcomes) and is backed by evidence (multiple studies). Options A, B, and D are interesting but do not support the specific claim.'},
+      {id:'q24',num:24,
+       text:'Which sentence BEST develops a paragraph about the importance of sleep for students?',
+       opts:['Most students do not get enough sleep and that can be bad for them.','Sleep is something that all living things need to survive and stay healthy.','Research by the National Sleep Foundation shows that teenagers who sleep fewer than eight hours per night are 40% more likely to experience concentration difficulties.','When students are tired in class, they find it hard to pay attention to the teacher.'],
+       ans:2,ccss:'W.4.2b',domain:'Developing with Facts',
+       feedback:'Option C provides a specific, credible statistic from a named source. This is far more persuasive than general observations, which is what the other options offer.'},
+      {id:'q25',num:25,
+       text:'A student is writing a paragraph arguing that physical education should be required every school day. Arrange these sentences in the most logical order:\n\n1. Physical education should be a daily requirement for all students.\n2. Beyond fitness, daily PE has been shown to improve academic performance and classroom focus.\n3. For instance, a 2019 study found that students with daily PE scored 15% higher on math assessments.\n4. Schools that implement this policy would produce healthier, more focused, and higher-achieving students.',
+       opts:['2, 3, 1, 4','3, 1, 2, 4','1, 2, 3, 4','4, 1, 3, 2'],
+       ans:2,ccss:'W.4.1b',domain:'Organizing Ideas',
+       feedback:'Effective paragraph structure: claim (1) - supporting idea (2) - specific evidence (3) - conclusion (4). The topic sentence comes first, followed by reasoning and evidence, then a final wrap-up.'},
+      {id:'q26',num:26,
+       text:'Which sentence does NOT belong in a paragraph about how space exploration benefits life on Earth?',
+       opts:['Technologies developed for NASA, including memory foam and water filtration systems, are now widely used in everyday products.','Space exploration requires the cooperation of scientists, engineers, and governments from many countries.','The first moon landing took place on July 20, 1969, when Neil Armstrong stepped onto the lunar surface.','Satellites developed for space missions now provide the GPS navigation and weather forecasting systems used daily around the world.'],
+       ans:2,ccss:'W.4.2b',domain:'Organizing Ideas',
+       feedback:'Option C, while historically interesting, is about an event rather than a benefit to everyday life on Earth. All other options directly support the paragraph\'s claim about benefits.'},
+    ]
+  },
+  {
+    id:'s3',
+    title:'Section 3: Written Responses',
+    ccss:'W.4.4 - W.4.1 - W.4.2 - L.4.1 - L.4.2',
+    desc:'Complete both writing tasks in full sentences. Each task is worth 6 points. Write carefully - there is no right or wrong answer, but your writing will be scored on organization, support, grammar, and completeness.',
+    questions:[],
+    written:true
+  }
+];
+
+const WRITTEN_QS = [
+  {
+    id:'wq1',num:1,
+    title:'Written Response 1 - Organized Paragraph',
+    prompt:'Write a well-organized paragraph (5 to 7 sentences) explaining why students should learn a second language.\n\nYour paragraph must include:\n- A topic sentence that clearly states your main idea\n- At least TWO supporting details with specific facts or examples\n- A concluding sentence that follows from the ideas in your paragraph\n\nUse correct grammar, punctuation, and spelling throughout.',
+    points:6,
+    rubric:[
+      {criterion:'Topic sentence',pts:1,desc:'Opens with a clear, specific statement of the main idea'},
+      {criterion:'Supporting detail 1',pts:1,desc:'Provides a relevant, specific detail or fact that supports the claim'},
+      {criterion:'Supporting detail 2',pts:1,desc:'Provides a second relevant, specific detail or fact'},
+      {criterion:'Concluding sentence',pts:1,desc:'Closes with a sentence that follows logically from the paragraph\'s argument'},
+      {criterion:'Grammar and conventions',pts:1,desc:'Demonstrates correct sentence structure, verb tenses, capitalization, and punctuation'},
+      {criterion:'Completeness and organization',pts:1,desc:'Paragraph is 5 to 7 sentences and all required elements are present and logically ordered'},
+    ]
+  },
+  {
+    id:'wq2',num:2,
+    title:'Written Response 2 - Error Correction and Explanation',
+    prompt:'Read the paragraph below carefully. It contains four types of grammar errors: capitalization mistakes, an incorrect verb tense, a sentence fragment, and a run-on sentence.\n\nStep 1: Rewrite the paragraph correcting ALL errors.\nStep 2: After your rewrite, list and explain each of the four types of errors you found and corrected.',
+    passage:'On wednesday, our class began a science project about renewable energy. solar panels, wind turbines, and hydroelectric dams is all examples of renewable energy sources. Our teacher asked us to research one source each student choose a different topic. My partner and I chose wind energy we learned that wind turbines can generate enough electricity to power hundreds of homes. Working together and sharing our findings with the class.',
+    points:6,
+    rubric:[
+      {criterion:'Capitalization corrections',pts:2,desc:'Correctly capitalizes "Wednesday" and "Solar" (start of sentence); does not over-capitalize common nouns'},
+      {criterion:'Verb tense correction',pts:1,desc:'Corrects "is" to "are" (subject-verb agreement) and/or "choose" to "chose" (past tense)'},
+      {criterion:'Fragment correction',pts:1,desc:'Correctly identifies and fixes the fragment ("Working together and sharing our findings with the class")'},
+      {criterion:'Run-on correction',pts:1,desc:'Correctly separates or joins the run-on sentence ("...wind energy we learned...")'},
+      {criterion:'Error explanation',pts:1,desc:'Identifies all four error types by name and briefly explains what was wrong and how it was fixed'},
+    ]
+  },
+  {
+    id:'wq3',num:3,
+    title:'Written Response 3 - Grammar in Context',
+    prompt:'Write a short paragraph (5 to 7 sentences) describing a school project or experiment you imagine doing this term. You are writing a plan, not a report of something already completed.\n\nYour paragraph must demonstrate:\n- At least TWO progressive verb tenses: one present progressive (e.g. we are building) and one future progressive (e.g. we will be testing)\n- At least TWO modal auxiliary verbs used correctly (choose from: can, could, may, might, must, should, will, would)\n- At least ONE compound sentence using a coordinating conjunction with correct comma placement\n- Correct capitalization throughout\n\nUnderline or mark in brackets each grammar feature as you use it.',
+    points:6,
+    rubric:[
+      {criterion:'Progressive tenses',pts:2,desc:'Present progressive and future progressive both used correctly in context'},
+      {criterion:'Modal auxiliaries',pts:1,desc:'At least two different modal auxiliary verbs used appropriately'},
+      {criterion:'Compound sentence',pts:1,desc:'At least one compound sentence with a coordinating conjunction and correct comma placement'},
+      {criterion:'Capitalization',pts:1,desc:'All proper nouns, titles, and sentence beginnings are correctly capitalized'},
+      {criterion:'Completeness and labeling',pts:1,desc:'Paragraph is 5 to 7 sentences, addresses the task fully, and grammar features are identified'},
+    ]
+  }
+];
+
+// ============================================================
+// STATE
+// ============================================================
+let currentSec=0;
+let timeLeft=3600;
+let timerInterval=null;
+let answers={};
+let writtenAnswers={};
+let mcqScore=0;
+
+function checkAgreement(){
+  document.getElementById('btn-start').disabled=!document.getElementById('agree-check').checked;
+}
+
+function startTest(){
+  const name=document.getElementById('student-name').value.trim();
+  if(!name){alert('Please enter your full name before starting.');return;}
+  document.getElementById('hdr-student').textContent=name;
+  document.getElementById('cover').classList.remove('active');
+  document.getElementById('test').classList.add('active');
+  document.getElementById('test-date').value=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+  buildDots();
+  renderSec(0);
+  startTimer();
+}
+
+function buildDots(){
+  const wrap=document.getElementById('sec-dots');
+  wrap.innerHTML='';
+  SECTIONS.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='sec-dot'+(i===0?' active':'');
+    d.onclick=()=>goSec(i);
+    wrap.appendChild(d);
+  });
+}
+
+function updateDots(){
+  document.querySelectorAll('.sec-dot').forEach((d,i)=>{
+    d.className='sec-dot'+(i<currentSec?'done':(i===currentSec?'active':''));
+  });
+}
+
+function startTimer(){
+  timerInterval=setInterval(()=>{
+    timeLeft--;
+    const m=String(Math.floor(timeLeft/60)).padStart(2,'0');
+    const s=String(timeLeft%60).padStart(2,'0');
+    document.getElementById('timer-display').textContent=m+':'+s;
+    if(timeLeft<=300)document.getElementById('timer-box').classList.add('warn');
+    if(timeLeft<=0){clearInterval(timerInterval);submitTest();}
+  },1000);
+}
+
+// ============================================================
+// RENDER
+// ============================================================
+function renderSec(idx){
+  const sec=SECTIONS[idx];
+  const body=document.getElementById('t-body');
+  body.innerHTML='';
+  const hd=document.createElement('div');
+  hd.className='sec-hd';
+  hd.innerHTML=`<h3>${sec.title}</h3>
+    <div class="sec-ccss">${sec.ccss}</div>
+    <div class="sec-desc">${sec.desc}</div>`;
+  body.appendChild(hd);
+  if(!sec.written){
+    sec.questions.forEach(q=>body.appendChild(buildMCQ(q)));
+  } else {
+    WRITTEN_QS.forEach(wq=>body.appendChild(buildWritten(wq)));
+  }
+  updateProgress();
+  updateDots();
+  document.getElementById('q-counter').textContent=`Section ${idx+1} of ${SECTIONS.length}`;
+  document.getElementById('nav-info').textContent=`Section ${idx+1} of ${SECTIONS.length}`;
+  document.getElementById('btn-prev').disabled=(idx===0);
+  const isLast=(idx===SECTIONS.length-1);
+  const nb=document.getElementById('btn-next');
+  nb.textContent=isLast?'Submit Test':'Next';
+  nb.className='btn-nav '+(isLast?'btn-submit':'btn-next');
+  window.scrollTo(0,0);
+}
+
+function buildMCQ(q){
+  const card=document.createElement('div');
+  card.className='q-card';
+  const letters=['A','B','C','D'];
+  const sel=answers[q.id];
+  const textParts=q.text.split('\n');
+  const mainText=textParts[0];
+  const blockText=textParts.slice(1).join('\n').trim();
+  card.innerHTML=`
+  <div class="q-meta">
+    <span class="q-badge num">Q${q.num}</span>
+    <span class="q-badge ccss">${q.ccss}</span>
+    <span class="q-badge domain">${q.domain}</span>
+  </div>
+  <div class="q-text">${mainText}${blockText?`<div class="block-text">${blockText}</div>`:''}</div>
+  <div class="options" id="opts-${q.id}">
+    ${q.opts.map((o,i)=>`
+    <div class="opt${sel===i?' selected':''} ${sel!==undefined?'locked':''}"
+      id="opt-${q.id}-${i}"
+      ${sel===undefined?`onclick="selectOpt('${q.id}',${i})"`:''}>
+      <div class="opt-letter">${letters[i]}</div>
+      <span>${o}</span>
+    </div>`).join('')}
+  </div>`;
+  return card;
+}
+
+// Official test: no feedback shown during test
+function selectOpt(qid,idx){
+  if(answers[qid]!==undefined)return;
+  answers[qid]=idx;
+  document.querySelectorAll(`[id^="opt-${qid}-"]`).forEach((opt,i)=>{
+    opt.classList.add('locked');
+    opt.removeAttribute('onclick');
+    if(i===idx)opt.classList.add('selected');
+  });
+  updateProgress();
+}
+
+function buildWritten(wq){
+  const card=document.createElement('div');
+  card.className='wr-card';
+  const val=writtenAnswers[wq.id]||'';
+  card.innerHTML=`
+  <div class="q-meta">
+    <span class="q-badge num">Written Response ${wq.num}</span>
+    <span class="q-badge ccss">W.4.4</span>
+    <span class="q-badge domain">Written Response</span>
+    <span class="wr-points">${wq.points} points</span>
+  </div>
+  <h4>${wq.title}</h4>
+  <div class="wr-prompt">${wq.prompt.replace(/\n/g,'<br>')}
+    ${wq.passage?`<div class="passage-block">${wq.passage}</div>`:''}
+  </div>
+  <div class="wr-criteria">
+    <strong>Scoring Criteria (for teacher reference)</strong>
+    <ul>${wq.rubric.map(r=>`<li><strong>${r.criterion} (${r.pts} pt${r.pts>1?'s':''}):</strong> ${r.desc}</li>`).join('')}</ul>
+  </div>
+  <textarea class="wr-textarea" id="wr-${wq.id}" placeholder="Write your response here. Use complete sentences."
+    oninput="saveWritten('${wq.id}',this.value)">${val}</textarea>
+  <div class="wr-counter" id="wc-${wq.id}">${val.trim().split(/\s+/).filter(w=>w).length} words</div>`;
+  return card;
+}
+
+function saveWritten(id,val){
+  writtenAnswers[id]=val;
+  const words=val.trim().split(/\s+/).filter(w=>w).length;
+  const el=document.getElementById('wc-'+id);
+  if(el)el.textContent=words+' words';
+  updateProgress();
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function prevSec(){if(currentSec>0){currentSec--;renderSec(currentSec);}}
+function goSec(i){currentSec=i;renderSec(i);}
+
+function trySubmit(){
+  if(currentSec<SECTIONS.length-1){currentSec++;renderSec(currentSec);return;}
+  const allQ=SECTIONS.flatMap(s=>s.questions||[]);
+  const unanswered=allQ.filter(q=>answers[q.id]===undefined).length;
+  const noWR=WRITTEN_QS.filter(wq=>!(writtenAnswers[wq.id]||'').trim()).length;
+  let msg='Are you sure you want to submit your official test?';
+  if(unanswered>0)msg+=` You have ${unanswered} unanswered MCQ question${unanswered>1?'s':''}.`;
+  if(noWR>0)msg+=` You have ${noWR} incomplete written response${noWR>1?'s':''}.`;
+  document.getElementById('modal-msg').textContent=msg;
+  document.getElementById('confirm-modal').classList.add('show');
+}
+
+function closeModal(){document.getElementById('confirm-modal').classList.remove('show');}
+
+function updateProgress(){
+  const allQ=SECTIONS.flatMap(s=>s.questions||[]);
+  const doneQ=allQ.filter(q=>answers[q.id]!==undefined).length;
+  const doneWR=WRITTEN_QS.filter(wq=>(writtenAnswers[wq.id]||'').trim().length>10).length;
+  const total=allQ.length+WRITTEN_QS.length;
+  document.getElementById('prog-fill').style.width=Math.round((doneQ+doneWR)/total*100)+'%';
+}
+
+// ============================================================
+// SUBMIT AND RESULTS
+// ============================================================
+
+// ============================================================
+// AUTO-SUBMISSION via Formspree — fires automatically on submit
+// ============================================================
+async function sendToFormspree(scoreData){
+  const bannerEl = document.getElementById('submit-banner');
+  const endpoint = getFsEndpoint();
+
+  if(!endpoint){
+    if(bannerEl){
+      bannerEl.innerHTML = 'Formspree not configured. Ask your teacher to open the test and click <strong>Configure Submission Endpoint</strong>.';
+      bannerEl.style.background='#fff3cd'; bannerEl.style.color='#7a5500'; bannerEl.style.borderColor='#f5d78e';
+    }
+    return;
+  }
+
+  if(bannerEl){ bannerEl.textContent='Submitting results — please wait...'; bannerEl.style.background='#edf2f8'; bannerEl.style.color='#546e8a'; bannerEl.style.borderColor='#d4dce8'; }
+
+  function safe(str){ return (str||'No response submitted.').substring(0,3000); }
+
+  const payload = {
+    _subject:        scoreData._subject,
+    _replyto:        'noreply@exactpath.test',
+    test_type:       scoreData.test_type,
+    student_name:    scoreData.student_name,
+    teacher:         scoreData.teacher,
+    test_date:       scoreData.test_date,
+    mcq_score:       scoreData.mcq_score,
+    score_breakdown: scoreData.score_breakdown,
+    written_1_title: 'Written Response 1 (Organized Paragraph)',
+    written_1:       safe(scoreData.written_response_1),
+    written_2_title: 'Written Response 2 (Error Correction)',
+    written_2:       safe(scoreData.written_response_2),
+    written_3_title: 'Written Response 3 (Extended Writing)',
+    written_3:       safe(scoreData.written_response_3),
+  };
+
+  try{
+    const resp = await fetch(endpoint, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body: JSON.stringify(payload)
+    });
+    const data = await resp.json();
+    if(resp.ok){
+      if(bannerEl){ bannerEl.textContent='Results submitted to your teacher successfully.'; bannerEl.style.background='#e6f9ee'; bannerEl.style.color='#1a5c35'; bannerEl.style.borderColor='#a8dfc0'; bannerEl.style.fontWeight='700'; }
+    } else {
+      const msg = (data.errors||[]).map(e=>e.message).join(', ') || ('Status '+resp.status);
+      if(bannerEl){
+        bannerEl.innerHTML = 'Submission error: '+msg+
+          '<br><small style="font-weight:400;display:block;margin-top:6px">Make sure <strong>'+window.location.hostname+
+          '</strong> is listed in Formspree Settings > Allowed Domains.</small>';
+        bannerEl.style.background='#fdeaea'; bannerEl.style.color='#8c1c1c'; bannerEl.style.borderColor='#f5c6c6';
+      }
+    }
+  } catch(netErr){
+    if(bannerEl){
+      bannerEl.innerHTML = 'Network error: '+netErr.message+
+        '<br><small style="font-weight:400;display:block;margin-top:6px">Check your internet connection and try again.</small>';
+      bannerEl.style.background='#fdeaea'; bannerEl.style.color='#8c1c1c'; bannerEl.style.borderColor='#f5c6c6';
+    }
+  }
+}
+
+function submitTest(){
+  clearInterval(timerInterval);
+  document.getElementById('confirm-modal').classList.remove('show');
+
+  const allQ = SECTIONS.flatMap(s => s.questions || []);
+  let correct = 0;
+  allQ.forEach(q => { if(answers[q.id] === q.ans) correct++; });
+  const total = allQ.length;
+  const pct   = Math.round(correct / total * 100);
+
+  const domains = {};
+  allQ.forEach(q => {
+    if(!domains[q.domain]) domains[q.domain] = {correct:0, total:0};
+    domains[q.domain].total++;
+    if(answers[q.id] === q.ans) domains[q.domain].correct++;
+  });
+
+  // Switch screens
+  document.getElementById('test').classList.remove('active');
+  document.getElementById('results').classList.add('active');
+
+  const name    = document.getElementById('student-name').value;
+  const date    = document.getElementById('test-date').value;
+  const teacher = document.getElementById('teacher-name').value || 'Not specified';
+
+  document.getElementById('res-meta1').textContent = 'Student: ' + name + (teacher !== 'Not specified' ? ' — Teacher: ' + teacher : '');
+  document.getElementById('res-meta2').textContent = 'Date: ' + date;
+  document.getElementById('score-pct').textContent  = pct + '%';
+  document.getElementById('score-raw').textContent  = correct + ' / ' + total;
+  document.getElementById('combined-display').textContent = correct + ' + __ / 44';
+
+  setTimeout(() => {
+    document.getElementById('score-arc').style.strokeDashoffset = 427 - (427 * (pct / 100));
+  }, 300);
+
+  let grade, gpClass, msg;
+  if     (pct >= 90){ grade='A'; gpClass='A'; msg='Excellent performance. Strong mastery demonstrated across all standards.'; }
+  else if(pct >= 80){ grade='B'; gpClass='B'; msg='Good performance. Solid understanding with a few areas to review.'; }
+  else if(pct >= 70){ grade='C'; gpClass='C'; msg='Satisfactory. Review the standards where points were lost with your teacher.'; }
+  else              { grade='D'; gpClass='D'; msg='Further practice needed. Please review all sections with your teacher.'; }
+  document.getElementById('grade-pill-wrap').innerHTML = `<div class="grade-pill grade-${gpClass}">${grade} — ${pct}% (MCQ only)</div>`;
+  document.getElementById('perf-msg').textContent = msg;
+
+  // Domain breakdown
+  const dWrap = document.getElementById('domain-breakdown');
+  dWrap.innerHTML = '';
+  Object.entries(domains).forEach(([dom, data]) => {
+    const dpct = Math.round(data.correct / data.total * 100);
+    dWrap.innerHTML += `<div class="domain-row">
+      <div class="domain-label">${dom}</div>
+      <div class="domain-bar-wrap"><div class="domain-bar" style="width:0%" data-w="${dpct}%"></div></div>
+      <div class="domain-score">${data.correct}/${data.total}</div>
+    </div>`;
+  });
+  setTimeout(() => {
+    document.querySelectorAll('.domain-bar').forEach(b => b.style.width = b.dataset.w);
+  }, 500);
+
+  // MCQ answer review (answers revealed only now)
+  const revWrap = document.getElementById('answer-review');
+  revWrap.innerHTML = '';
+  let qn = 0;
+  SECTIONS.forEach(sec => {
+    if(sec.questions && sec.questions.length) {
+      const lbl = document.createElement('p');
+      lbl.style.cssText = 'font-weight:700;font-size:.82rem;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px';
+      lbl.textContent = sec.title;
+      revWrap.appendChild(lbl);
+      sec.questions.forEach(q => {
+        qn++;
+        const ok = answers[q.id] === q.ans;
+        const r  = document.createElement('div');
+        r.className = 'rev-item ' + (ok ? 'ok' : 'no');
+        r.innerHTML = `<div class="rev-icon">${ok ? '[OK]' : '[X]'}</div>
+          <div>
+            <div class="rev-q">Q${qn}. ${q.text.split('\n')[0]}</div>
+            <div class="rev-ans">${ok
+              ? 'Correct: ' + q.opts[q.ans]
+              : 'Your answer: ' + (answers[q.id] !== undefined ? q.opts[answers[q.id]] : 'Not answered') + ' — Correct: ' + q.opts[q.ans]
+            }</div>
+            ${!ok ? `<div class="rev-ans" style="color:#5a2020;margin-top:3px;font-style:italic">${q.feedback}</div>` : ''}
+          </div>`;
+        revWrap.appendChild(r);
+      });
+    }
+  });
+
+  // Written response teacher-scoring section
+  const wsWrap = document.getElementById('written-scoring');
+  if(wsWrap){
+    wsWrap.innerHTML = '';
+    WRITTEN_QS.forEach((wq, wqIdx) => {
+      const response = (writtenAnswers[wq.id] || '').trim();
+      const block = document.createElement('div');
+      block.className = 'teacher-score-block';
+      block.innerHTML = `<h5>${wq.title} — out of ${wq.points} points</h5>
+        <p style="font-size:.82rem;color:var(--mid);margin-bottom:8px">Student response:</p>
+        <div class="student-response-box">${response || 'No response was submitted.'}</div>
+        <table class="rubric-table">
+          <thead><tr><th>Criterion</th><th>Points Available</th><th>Description</th><th>Score</th></tr></thead>
+          <tbody>${wq.rubric.map((r,ri) => `<tr>
+            <td>${r.criterion}</td>
+            <td><span class="pts-pill">${r.pts}</span></td>
+            <td>${r.desc}</td>
+            <td><input class="score-input" type="number" min="0" max="${r.pts}" placeholder="0-${r.pts}"
+              onchange="updateWrittenTotal(${wqIdx},${ri},this.value,${r.pts})"></td>
+          </tr>`).join('')}</tbody>
+        </table>
+        <div style="text-align:right;margin-top:10px;font-weight:700;font-size:.9rem;color:var(--navy)">
+          Subtotal: <span id="wq-sub-${wq.id}">0</span> / ${wq.points}
+        </div>`;
+      wsWrap.appendChild(block);
+    });
+  }
+
+  // Build score breakdown text
+  let breakdown_txt = '';
+  Object.entries(domains).forEach(([d,v]) => { breakdown_txt += d + ': ' + v.correct + '/' + v.total + '\n'; });
+
+  // Auto-submit to Formspree (includes all written responses)
+  sendToFormspree({
+    _subject:          '[Official] Grade 4 Language and Writing — ' + name + ' — ' + correct + '/' + total + ' (' + pct + '%)',
+    test_type:         'OFFICIAL TEST',
+    student_name:      name,
+    teacher:           teacher,
+    test_date:         date,
+    mcq_score:         correct + ' / ' + total + ' (' + pct + '%)',
+    score_breakdown:   breakdown_txt,
+    written_response_1: writtenAnswers['wq1'] || 'No response submitted',
+    written_response_2: writtenAnswers['wq2'] || 'No response submitted',
+    written_response_3: writtenAnswers['wq3'] || 'No response submitted'
+  });
+
+  window.scrollTo(0, 0);
+}
+
+// ============================================================
+// DELIVERY
+// ============================================================
+
+function downloadScoreCard(){
+  const allQ=SECTIONS.flatMap(s=>s.questions||[]);
+  let correct=0;
+  allQ.forEach(q=>{if(answers[q.id]===q.ans)correct++;});
+  const pct=Math.round(correct/allQ.length*100);
+  const name=document.getElementById('student-name').value;
+  const teacher=document.getElementById('teacher-name').value||'Not specified';
+  const date=document.getElementById('test-date').value||new Date().toLocaleDateString();
+  const domains={};
+  allQ.forEach(q=>{
+    if(!domains[q.domain])domains[q.domain]={correct:0,total:0};
+    domains[q.domain].total++;
+    if(answers[q.id]===q.ans)domains[q.domain].correct++;
+  });
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8">
+<title>Score Card - ${name}</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;600;700&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#f4f6fa;padding:32px;color:#0f2744}
+.card{background:white;border-radius:16px;padding:40px;max-width:680px;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.1)}
+.hdr{background:linear-gradient(135deg,#062038,#0f2744);color:white;border-radius:12px;padding:28px;text-align:center;margin-bottom:28px}
+.hdr h1{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:4px}
+.tag{background:#e8a020;color:#0f2744;font-weight:700;font-size:.72rem;letter-spacing:1px;padding:3px 12px;border-radius:20px;display:inline-block;margin-bottom:12px}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:24px}
+.mi{background:#edf2f8;border-radius:8px;padding:12px}
+.mi .l{font-size:.7rem;font-weight:700;color:#546e8a;text-transform:uppercase;letter-spacing:.5px}
+.mi .v{font-weight:700;font-size:1rem;margin-top:3px}
+.big{text-align:center;margin-bottom:24px}
+.big .n{font-family:'Playfair Display',serif;font-size:3.5rem;color:#0f2744}
+table{width:100%;border-collapse:collapse;font-size:.88rem;margin-bottom:20px}
+th{background:#0f2744;color:white;padding:9px 12px;text-align:left;font-size:.78rem}
+td{padding:9px 12px;border-bottom:1px solid #edf2f8}
+tr:nth-child(even) td{background:#f4f6fa}
+.note{background:#edf2f8;border-radius:10px;padding:16px;font-size:.85rem;margin-bottom:16px}
+.foot{text-align:center;font-size:.78rem;color:#546e8a;margin-top:20px;padding-top:16px;border-top:1px solid #edf2f8}
+@media print{body{background:white;padding:0}.card{box-shadow:none}}
+</style></head><body><div class="card">
+<div class="hdr"><div class="tag">OFFICIAL TEST</div><h1>Grade 4 Language and Writing - Assessment 1</h1><p style="opacity:.8;font-size:.9rem">Official Score Card - Weeks 1-11</p></div>
+<div class="meta">
+<div class="mi"><div class="l">Student</div><div class="v">${name}</div></div>
+<div class="mi"><div class="l">Date</div><div class="v">${date}</div></div>
+<div class="mi"><div class="l">Teacher</div><div class="v">${teacher}</div></div>
+<div class="mi"><div class="l">Test Type</div><div class="v">Official Assessment</div></div>
+</div>
+<div class="big"><div class="n">${correct} / ${allQ.length}</div><p style="font-size:.9rem;color:#546e8a;margin-top:4px">MCQ Score (${pct}%)</p></div>
+<h3 style="font-family:'Playfair Display',serif;margin-bottom:12px;font-size:1rem">Score by Standard</h3>
+<table><thead><tr><th>Standard / Domain</th><th>Score</th><th>Percentage</th></tr></thead><tbody>
+${Object.entries(domains).map(([d,v])=>`<tr><td>${d}</td><td>${v.correct}/${v.total}</td><td>${Math.round(v.correct/v.total*100)}%</td></tr>`).join('')}
+</tbody></table>
+<h3 style="font-family:'Playfair Display',serif;margin-bottom:12px;font-size:1rem">Question Review</h3>
+<table><thead><tr><th>#</th><th>Standard</th><th>Result</th><th>Correct Answer</th></tr></thead><tbody>
+${(()=>{let rows='';let n=0;SECTIONS.forEach(sec=>{if(!sec.written&&sec.questions){sec.questions.forEach(q=>{n++;const ok=answers[q.id]===q.ans;rows+=`<tr><td>${n}</td><td>${q.ccss}</td><td style="color:${ok?'#1a5c35':'#8c1c1c'};font-weight:700">${ok?'Correct':'Incorrect'}</td><td>${q.opts[q.ans]}</td></tr>`;});}});return rows;})()}
+</tbody></table>
+<div class="note">
+<strong>Written Responses - Teacher Scored (12 points total):</strong><br>
+${WRITTEN_QS.map(wq=>`<br>Written Response ${wq.num}: ${wq.title} - __ / ${wq.points} pts`).join('')}<br><br>
+<strong>Combined Total: ${correct} (MCQ) + __ (Written) / 44 points</strong>
+</div>
+<div class="foot">Grade 4 Language and Writing - Exact Path Program - Official Assessment 1 - ${date}</div>
+</div><script>window.onload=()=>window.print()<\/script></body></html>`;
+  const blob=new Blob([html],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`${name.replace(/\s+/g,'_')}_Official_LangWriting_Assessment1_ScoreCard.html`;
+  a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),5000);
+}
+</script>
+
+<!-- Formspree setup modal -->
+<div class="fs-modal-overlay" id="fs-modal-overlay">
+  <div class="fs-modal">
+    <h3>Configure Submission Endpoint</h3>
+    <p class="fs-sub">
+      Paste your <a href="https://formspree.io" target="_blank">Formspree</a> form URL below.
+      This is saved in your browser — you only need to do this once per device.<br><br>
+      Your Formspree URL looks like:<br>
+      <strong>https://formspree.io/f/xxxxxxxx</strong>
+    </p>
+    <div class="fs-field">
+      <label>Formspree Form URL</label>
+      <input type="url" id="fs-url-input" placeholder="https://formspree.io/f/xxxxxxxx" autocomplete="off" spellcheck="false">
+      <div class="fs-hint">
+        1. Go to <strong>formspree.io</strong> and sign in<br>
+        2. Open your form and copy the URL shown on the form page<br>
+        3. Paste it above and click Save
+      </div>
+    </div>
+    <div class="fs-err" id="fs-err">Please paste a valid Formspree URL (it must start with https://formspree.io/f/)</div>
+    <div class="fs-modal-btns">
+      <button class="fs-btn-cancel" onclick="closeFsModal()">Cancel</button>
+      <button class="fs-btn-save" onclick="saveFsEndpoint()">Save</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
